@@ -3,24 +3,26 @@ Este proyecto busca generar una plataforma computacional de gestión predictiva 
 riesgos climáticos para agricultura sostenible
 
 Cómo instalarlo:
-Cónectate al repositorio que está en Github en el siguiente link: https://github.com/Mauricio-Avina/riesgo-agroclimatico
-Y ahí haz git pull para poder tener todo el proyecto.
+1. Instala python 3.12
+2. Clona el repositorio con git clone. (https://github.com/Mauricio-Avina/riesgo-agroclimatico)
+3. Crea y activa el entorno
+4. E instala las librerías con pip install -r requierements.txt
 
 Cómo está organizado:
 riesgo-agroclimatico/
-├── data/
-│   ├── bronce/
-│   ├── plata/
-│   └── oro/
-├── notebooks/
-├── src/
-│   ├── etl/
-│   ├── features/
-│   ├── models/
-│   ├── api/
-│   └── app/
-├── tests/
-├── reports/figures/
-├── docs/
-├── requirements.txt
-└── README.md
+├── data/  #Aquí estarán los datos
+│   ├── bronce/ # Datos raw 
+│   ├── plata/  # Datos ETL
+│   └── oro/    # Datos listos para el usuario
+├── notebooks/  # Libretas de análisis
+├── src/        # Fuentes y código
+│   ├── etl/    # Código ETL
+│   ├── features/ 
+│   ├── models/ # Modelos entrenados
+│   ├── api/    # Apis de conexión a las fuentes
+│   └── app/    # Script de app
+├── tests/      # Pruebas
+├── reports/figures/ #Reportes y figuras ilustrativas para el reporte
+├── docs/       # Documentos
+├── requirements.txt # Librerías a instalar
+└── README.md   # Acerca del proyecto
