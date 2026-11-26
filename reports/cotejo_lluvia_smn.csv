@@ -1,0 +1,5 @@
+cvegeo,estacion,nombre,inicio_power,fin_power,anios_completos,power_mm,smn_1991_2020_mm,diferencia_mm,diferencia_pct
+11001,11001,Abasolo,2003,2020,18,715.15,673.80,41.36,6.14
+11001,11001,Abasolo,2003,2025,23,709.00,673.80,35.20,5.22
+22006,22004,El Batán,2003,2020,18,677.95,677.40,0.55,0.08
+22006,22004,El Batán,2003,2025,23,668.60,677.40,-8.80,-1.30
