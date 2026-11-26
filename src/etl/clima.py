@@ -8,7 +8,6 @@ import pandas as pd
 
 from src import config
 from src.etl.archivos import descargar, guardar_parquet
-from src.etl import municipios
 from src.registro import configurar_registro
 
 log = logging.getLogger(__name__)
@@ -17,6 +16,7 @@ VARIABLES = {"T2M_MAX": "tmax", "T2M_MIN": "tmin", "PRECTOTCORR": "lluvia",
 
 
 def descargar_municipio(cvegeo, lat, lon):
+    """Obtiene o reutiliza una serie para el punto municipal indicado."""
     ruta = config.BRONCE / "power" / f"{cvegeo}.json"
     params = dict(parameters=",".join(VARIABLES), community="AG", latitude=round(lat, 6),
                   longitude=round(lon, 6), start=f"{config.ANIO_INICIAL}0101",
@@ -31,9 +31,12 @@ def descargar_municipio(cvegeo, lat, lon):
     return descargar(url, ruta, lambda b: json.loads(b)["properties"]["parameter"])
 
 
-def json_a_tabla(ruta):
+def json_a_tabla(ruta, auditoria=None):
+    """Convierte la respuesta diaria de POWER y reconoce su código de ausencia."""
     datos = json.loads(ruta.read_bytes())
     serie = pd.DataFrame(datos["properties"]["parameter"])[list(VARIABLES)].rename(columns=VARIABLES)
+    if auditoria is not None:
+        auditoria.entrada("POWER", serie.replace(-999, float("nan")))
     serie.index = pd.to_datetime(serie.index, format="%Y%m%d")
     dias = pd.date_range(f"{config.ANIO_INICIAL}-01-01", f"{config.ANIO_FINAL}-12-31")
     if not serie.index.sort_values().equals(dias):
@@ -49,8 +52,7 @@ def json_a_tabla(ruta):
 def cotejar_lluvia(clima):
     """Compara la celda municipal con una estación del SMN en cada estado."""
     filas = []
-    for estado, estacion, nombre, cvegeo in [("gto", "11001", "Abasolo", "11001"),
-                                             ("qro", "22004", "El Batán", "22006")]:
+    for estado, estacion, nombre, cvegeo in config.ESTACIONES_SMN:
         archivo = f"nor9120_{estacion}.txt"
         url = f"https://smn.conagua.gob.mx/tools/RESOURCES/Normales_Climatologicas/Normales9120/{estado}/{archivo}"
         ruta = descargar(url, config.BRONCE / "smn" / archivo)
@@ -69,18 +71,23 @@ def cotejar_lluvia(clima):
     pd.DataFrame(filas).to_csv(config.REPORTES / "cotejo_lluvia_smn.csv", index=False, float_format="%.2f")
 
 
-def main():
+def main(auditoria=None):
+    """Publica el clima diario y completa la altitud de las celdas."""
     tabla = pd.read_parquet(config.PLATA / "municipios.parquet")
     partes = []
+    alturas = []
     for fila in tabla.itertuples(index=False):
         ruta = descargar_municipio(fila.cvegeo, fila.latitud, fila.longitud)
-        partes.append(json_a_tabla(ruta))
+        partes.append(json_a_tabla(ruta, auditoria))
+        alturas.append(json.loads(ruta.read_bytes())["geometry"]["coordinates"][2])
     clima = pd.concat(partes, ignore_index=True)
     if clima.duplicated(["cvegeo", "fecha"]).any():
         raise ValueError("Clave municipio-día duplicada")
     guardar_parquet(clima, config.PLATA / "clima_diario.parquet")
     log.info("Clima: nulos por variable %s.", clima[list(VARIABLES.values())].isna().sum().to_dict())
-    municipios.main()
+    # Al descargar la serie ya está disponible la elevación que reporta la celda.
+    tabla["altitud_celda_m"] = pd.array(alturas, dtype="Float64")
+    guardar_parquet(tabla, config.PLATA / "municipios.parquet")
     cotejar_lluvia(clima)
     log.info("Clima: %d días-municipio de %d series.", len(clima), len(tabla))
 

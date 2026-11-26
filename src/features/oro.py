@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 
 def unir(tabla, dimension, llaves, nombre):
+    """Une por clave y verifica la correspondencia y el número de filas."""
     resultado = tabla.merge(dimension, on=llaves, how="left", validate="many_to_one", indicator=True)
     faltan = resultado["_merge"].eq("left_only")
     log.info("Cruce %s: %d filas antes, %d después; %d municipios sin correspondencia.",
@@ -22,7 +23,8 @@ def unir(tabla, dimension, llaves, nombre):
     return resultado.drop(columns="_merge")
 
 
-def main():
+def main(auditoria=None):
+    """Construye el maestro y resume su cobertura por variable."""
     oro = pd.read_parquet(config.PLATA / "siap_maiz_pv.parquet")
     clima = pd.read_parquet(config.PLATA / "clima_diario.parquet")
     registros = []
@@ -35,6 +37,8 @@ def main():
     oro = unir(oro, pd.DataFrame(registros), ["cvegeo", "anio"], "clima por etapa")
     for nombre, llave in [("municipios", "cvegeo"), ("marginacion", "cvegeo"), ("inpc", "anio")]:
         oro = unir(oro, pd.read_parquet(config.PLATA / f"{nombre}.parquet"), [llave], nombre)
+    if auditoria is not None:
+        auditoria.entrada("Oro", oro)
     for nominal in ["precio_pesos_t", "valor_produccion_pesos"]:
         oro[f"{nominal}_de_{config.ANIO_BASE_PRECIOS}"] = oro[nominal] * oro.factor_pesos_constantes
     if oro.duplicated(CLAVE).any():

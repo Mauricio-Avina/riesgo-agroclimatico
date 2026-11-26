@@ -16,6 +16,10 @@ Cómo instalarlo:
    ```
 4. Instala las librerías con `pip install -r requirements.txt`.
 
+## Cómo correrlo
+
+`python -m src.pipeline`
+
 Cómo está organizado:
 riesgo-agroclimatico/
 ├── data/  #Aquí estarán los datos

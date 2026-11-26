@@ -5,6 +5,7 @@ from src import config
 
 
 def fechas_por_etapa(fecha_siembra, etapas=None):
+    """Convierte desplazamientos desde siembra en intervalos inclusivos."""
     origen = pd.Timestamp(fecha_siembra)
     if etapas is None:
         etapas = config.ETAPAS

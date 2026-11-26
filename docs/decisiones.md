@@ -107,3 +107,28 @@ La racha seca cuenta días seguidos con menos de 1 mm y se interrumpe al alcanza
 - **Decisión.** Aplicar la System Usability Scale (SUS) a los cinco participantes después de la prueba. Calcular el puntaje individual sobre 100 y su media aritmética. Se cumple el umbral fijado en RNF-01 cuando la media es mayor o igual a 68 puntos. [Requisitos](requisitos.md)
 - **Razón.** El requisito fija de antemano un criterio de aceptación para la percepción de uso que complementa el conteo de tareas completadas.
 - **Consecuencias.** Se conservarán las cinco puntuaciones y se reportará la media. Un buen SUS no sustituye la comprobación de autonomía de RF-08. La medición está pendiente de la sesión con usuarios.
+
+## D-014 · 26/11/2026 · Evento operativo de pérdida
+
+**Contexto y alternativas.** Se compararon cortes estrictos de 0, 10, 25 y 50 % de superficie siniestrada. **Decisión.** Definir el evento como pérdida total en más de una décima de la superficie sembrada del municipio, año y modalidad. **Razón.** Para priorizar la revisión territorial, esta magnitud distingue una afectación extensa de un siniestro localizado. Con 25 o 50 % se omitirían pérdidas superiores a una décima que ameritan verificación temprana. Es un criterio de diseño que se contrastará con la cooperativa. **Consecuencias.** Hay 594/2,776 eventos (21.40 %), 76/1,306 en riego (5.82 %) y 518/1,470 en temporal (35.24 %). El corte define el daño observado; el umbral de probabilidad para emitir una alerta se estimará después. [Comparación de cortes](../reports/umbrales_3_3.csv)
+
+## D-015 · 26/11/2026 · Validación de las tablas publicadas
+
+**Contexto y alternativas.** Los controles dispersos comprobaban partes de cada transformación. **Decisión.** Declarar en Pandera los contratos de las cinco tablas de plata y de oro: columnas requeridas, claves de cinco dígitos, unicidad, dominios, superficies, relaciones térmicas y calendario diario. **Razón.** Un contrato común permite validar archivos ya publicados y rechazar datos de prueba inválidos. **Consecuencias.** Las pruebas de procedencia, calendario mensual, pertenencia espacial y cardinalidad de cada unión siguen junto a la operación que les da sentido. La ejecución publica el reporte después de validar los seis archivos. [Reporte](../reports/calidad.csv)
+
+## D-016 · 26/11/2026 · Publicación oficial de marginación
+
+**Contexto y alternativas.** La primera integración utilizó la copia del repositorio IndiceMx. **Decisión.** Usar la hoja IMM_2020 del libro distribuido por CONAPO y conservar ambas descargas en bronce. **Razón.** La publicación institucional identifica al productor y la edición. **Consecuencias.** En el cruce por clave coincidieron 64 de 64 índices (diferencia absoluta máxima 0) y los 64 grados. Se conserva la limitación temporal del corte 2020. [Publicación de CONAPO](https://www.gob.mx/conapo/documentos/indices-de-marginacion-2020-284372)
+
+## D-017 · 26/11/2026 · Siembra de referencia para riego
+
+**Contexto y alternativas.** Se consideró una fecha exclusiva para riego frente al escenario común de D-008. **Decisión.** Conservar el 15 de junio en riego para comparar las modalidades bajo la misma exposición. **Razón.** En Guanajuato la agenda contempla esa fecha en punta de riego tanto en el norte (15 de mayo al 15 de junio) como en el centro y sur (1 de mayo al 30 de junio), p. 184. **Consecuencias.** Se interpreta como simulación regional. No acredita la fecha efectiva del riego en cada municipio queretano. Las fechas observadas permitirían evaluar un calendario diferenciado. [Agenda de Guanajuato](../data/bronce/inifap/agenda_Gto_2017.pdf)
+
+## D-018 · 26/11/2026 · Presupuesto de cuartillas del cuerpo
+
+- **Contexto.** Los lineamientos de entrega fijan una extensión máxima de 60 cuartillas (p. 3). El documento maestro tiene 38 páginas en el corte del 26 de noviembre.
+- **Alternativas consideradas.** Contar el archivo completo o medir el cuerpo desde la introducción hasta el final de las conclusiones.
+- **Decisión.** Aplicar el máximo de 60 cuartillas al cuerpo. Los preliminares, las referencias y los anexos quedan fuera del cómputo.
+- **Razón.** El sustentante aclaró el alcance del límite para este trabajo.
+- **Consecuencias.** En este corte, 4 páginas corresponden a preliminares, 23 al cuerpo, 8 a referencias y 3 a anexos. El cuerpo dispone de un margen de crecimiento de 37 cuartillas. Las 23 actuales incluyen apartados con texto de plantilla.
+- **Corte posterior a los pasos 2.6–2.8.** Word paginó 47 páginas totales. El cuerpo tiene 29 cuartillas, desde la introducción hasta las conclusiones, y dispone de 31 cuartillas adicionales. El análisis exploratorio ocupó dos páginas, la presentación de la propuesta una y la integración de datos tres.

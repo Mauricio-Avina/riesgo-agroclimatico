@@ -19,11 +19,13 @@ CLAVE = ["cvegeo", "anio", "modalidad"]
 
 
 def normalizar(nombre):
+    """Uniforma encabezados históricos de los cierres."""
     texto = unicodedata.normalize("NFKD", nombre).encode("ascii", "ignore").decode()
     return re.sub(r"[^a-z0-9]+", "_", texto.strip().lower()).strip("_")
 
 
-def leer_anio(anio):
+def leer_anio(anio, auditoria=None):
+    """Lee un cierre nacional y selecciona el alcance del piloto."""
     url = f"{BASE}10AE434F-A2158368-A120BC5A-EDF4AFAA&ANIO={anio}"
     ruta = descargar(url, config.BRONCE / "siap" / f"Cierre_agricola_mun_{anio}.csv")
     tabla = pd.read_csv(ruta, encoding="latin-1", dtype=str)
@@ -33,16 +35,21 @@ def leer_anio(anio):
                  & tabla.idcultivo.eq(str(config.ID_CULTIVO)) & tabla.nomcicloproductivo.eq(config.CICLO)
                  & tabla.nommodalidad.isin(config.MODALIDADES))
     filas = tabla.loc[seleccion].copy()
+    if auditoria is not None:
+        entrada = tabla.rename(columns={**MEDIDAS, "nommodalidad": "modalidad"})
+        entrada["cvegeo"] = entrada.idestado.str.zfill(2) + entrada.idmunicipio.str.zfill(3)
+        auditoria.entrada("SIAP", entrada[CLAVE + list(MEDIDAS.values())])
     if filas.empty or not filas.anio.eq(str(anio)).all() or not filas.nomcultivo.eq(config.CULTIVO).all():
         raise ValueError(f"Revisar catálogo y cobertura del cierre {anio}")
     log.info("SIAP %d: %d filas leídas, %d después del filtro.", anio, len(tabla), len(filas))
     return filas
 
 
-def main():
+def main(auditoria=None):
+    """Integra los cierres agrícolas del periodo delimitado."""
     descargar(BASE + "5D24F995-E734D711-1EA6F8D2-9D1387D7",
               config.BRONCE / "siap" / "Diccionario_agricola_2003_a_2025.xlsx")
-    tabla = pd.concat([leer_anio(anio) for anio in config.ANIOS], ignore_index=True)
+    tabla = pd.concat([leer_anio(anio, auditoria) for anio in config.ANIOS], ignore_index=True)
     tabla["cvegeo"] = tabla.idestado.str.zfill(2) + tabla.idmunicipio.str.zfill(3)
     tabla = tabla.rename(columns={"nommodalidad": "modalidad", **MEDIDAS})[CLAVE + list(MEDIDAS.values())]
     tabla["anio"] = pd.to_numeric(tabla.anio)
@@ -60,7 +67,7 @@ def main():
         raise ValueError("Superficie ausente o fuera del intervalo permitido")
     tabla["siniestralidad"] = tabla.siniestrada_ha.div(tabla.sembrada_ha.where(tabla.sembrada_ha > 0))
     referencia = tabla.loc[tabla.cvegeo.str.startswith("22") & tabla.anio.eq(2025), "sembrada_ha"].sum()
-    if not math.isclose(referencia, 77805.45, rel_tol=0, abs_tol=0.005):
+    if not math.isclose(referencia, config.SEMBRADA_QRO_2025_HA, rel_tol=0, abs_tol=0.005):
         raise ValueError(f"El cruce con la delimitación de Querétaro difiere: {referencia} ha")
     guardar_parquet(tabla.sort_values(CLAVE), config.PLATA / "siap_maiz_pv.parquet")
     log.info("SIAP: %d filas únicas; %d con sembrada cero; Querétaro 2025 %.2f ha.",

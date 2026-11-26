@@ -13,7 +13,8 @@ URL = "https://www.inegi.org.mx/app/indicesdeprecios/servicios/CalculadoraAjaxIn
 MESES = "ene feb mar abr may jun jul ago sep oct nov dic".split()
 
 
-def main():
+def main(auditoria=None):
+    """Obtiene los factores anuales para expresar importes en pesos constantes."""
     consulta = json.dumps({"idSerie": "865541", "esquema": "INP"}).encode()
     ruta = descargar(URL, config.BRONCE / "inegi" / "inpc_865541_mensual.json",
                      lambda b: json.loads(b)["d"], cuerpo_json=consulta)
@@ -21,9 +22,11 @@ def main():
     for entrada in json.loads(ruta.read_bytes())["d"]:
         periodo, indice = entrada.split("&")
         mes, anio = periodo.lower().split("-")
-        if int(anio) in config.ANIOS:
-            filas.append((int(anio), MESES.index(mes) + 1, float(indice)))
+        filas.append((int(anio), MESES.index(mes) + 1, float(indice)))
     meses = pd.DataFrame(filas, columns=["anio", "mes", "inpc"])
+    if auditoria is not None:
+        auditoria.entrada("INPC", meses[["anio", "inpc"]])
+    meses = meses.loc[meses.anio.isin(config.ANIOS)]
     calendario = pd.MultiIndex.from_product([config.ANIOS, range(1, 13)], names=["anio", "mes"])
     if not meses.set_index(["anio", "mes"]).sort_index().index.equals(calendario) or not meses.inpc.gt(0).all():
         raise ValueError("Serie mensual INPC incompleta, duplicada o con índices inválidos")

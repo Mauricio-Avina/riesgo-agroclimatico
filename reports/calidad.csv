@@ -1,0 +1,78 @@
+fuente,filas_entrada,filas_salida,motivo,tipo,variable,faltantes_antes,faltantes_despues,pct_antes,pct_despues
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",fuente,,,,,
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,cvegeo,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,anio,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,modalidad,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,sembrada_ha,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,cosechada_ha,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,siniestrada_ha,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,produccion_t,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,rendimiento_t_ha,873.000000,3.000000,0.105807,0.108069
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,precio_pesos_t,873.000000,3.000000,0.105807,0.108069
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,valor_produccion_pesos,0.000000,0.000000,0.000000,0.000000
+SIAP,825089,2776,"Cierre nacional filtrado por cultivo, ciclo, estados y modalidad",variable,siniestralidad,,0.000000,,0.000000
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,fuente,,,,,
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,cvegeo,0.000000,0.000000,0.000000,0.000000
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,municipio,0.000000,0.000000,0.000000,0.000000
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,latitud,,0.000000,,0.000000
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,longitud,,0.000000,,0.000000
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,area_km2,,0.000000,,0.000000
+Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,altitud_celda_m,,0.000000,,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,fuente,,,,,
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,cvegeo,,0.000000,,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,fecha,,0.000000,,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,tmax,0.000000,0.000000,0.000000,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,tmin,0.000000,0.000000,0.000000,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,lluvia,0.000000,0.000000,0.000000,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,radiacion,0.000000,0.000000,0.000000,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,humedad,0.000000,0.000000,0.000000,0.000000
+INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,fuente,,,,,
+INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,variable,anio,0.000000,0.000000,0.000000,0.000000
+INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,variable,inpc,0.000000,0.000000,0.000000,0.000000
+INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,variable,factor_pesos_constantes,,0.000000,,0.000000
+CONAPO,2469,64,Selección de los dos estados del fichero municipal nacional,fuente,,,,,
+CONAPO,2469,64,Selección de los dos estados del fichero municipal nacional,variable,cvegeo,0.000000,0.000000,0.000000,0.000000
+CONAPO,2469,64,Selección de los dos estados del fichero municipal nacional,variable,marginacion_2020,0.000000,0.000000,0.000000,0.000000
+CONAPO,2469,64,Selección de los dos estados del fichero municipal nacional,variable,grado_marginacion_2020,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,fuente,,,,,
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,cvegeo,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,anio,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,modalidad,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,sembrada_ha,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,cosechada_ha,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,siniestrada_ha,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,produccion_t,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,rendimiento_t_ha,3.000000,3.000000,0.108069,0.108069
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,precio_pesos_t,3.000000,3.000000,0.108069,0.108069
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,valor_produccion_pesos,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,siniestralidad,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,fecha_siembra_escenario,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,lluvia_siembra_mm,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,racha_seca_siembra_dias,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,gdd_siembra,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,radiacion_siembra_mj_m2_dia,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,lluvia_vegetativo_mm,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,racha_seca_vegetativo_dias,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,gdd_vegetativo,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,radiacion_vegetativo_mj_m2_dia,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,lluvia_floracion_mm,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,racha_seca_floracion_dias,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,gdd_floracion,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,radiacion_floracion_mj_m2_dia,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,calor_floracion_dias,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,lluvia_llenado_mm,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,racha_seca_llenado_dias,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,gdd_llenado,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,radiacion_llenado_mj_m2_dia,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,helada_llenado_dias,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,municipio,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,latitud,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,longitud,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,area_km2,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,altitud_celda_m,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,marginacion_2020,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,grado_marginacion_2020,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,inpc,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,factor_pesos_constantes,0.000000,0.000000,0.000000,0.000000
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,precio_pesos_t_de_2025,,3.000000,,0.108069
+Oro,2776,2776,Filas SIAP enriquecidas; conversión a pesos constantes,variable,valor_produccion_pesos_de_2025,,0.000000,,0.000000
