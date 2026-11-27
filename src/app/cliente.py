@@ -4,6 +4,7 @@ import requests
 import streamlit as st
 
 from src import config
+from src.app.fechas import fecha_larga
 
 
 class SinServicio(Exception):
@@ -35,5 +36,6 @@ def copia():
     return leer_copia(config.FICHA_LOCAL.stat().st_mtime_ns)
 
 
-def aviso_copia(datos):
-    st.warning(f"Modo sin conexión: datos del {datos['generado']} · Ciclo {datos['ciclo']}.")
+def aviso_copia(datos, corte=None):
+    fecha = f"datos del {fecha_larga(corte)}" if corte else f"datos del ciclo {datos['ciclo']}"
+    st.warning(f"Modo sin conexión: {fecha}. Copia generada el {fecha_larga(datos['generado'])}.")

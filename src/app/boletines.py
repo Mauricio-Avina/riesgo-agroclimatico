@@ -2,10 +2,11 @@
 from fpdf import FPDF
 
 from src import config
+from src.app.fechas import fecha_larga
 
 
 def escribir(ruta, fichas):
-    pdf = FPDF(format="A4")
+    pdf = FPDF(format="Letter")
     pdf.set_margins(17, 15, 17)
     pdf.set_auto_page_break(True, 13)
     pdf.add_font("DejaVu", fname=str(config.FUENTES_TIPOGRAFICAS / "DejaVuSans.ttf"))
@@ -22,7 +23,7 @@ def escribir(ruta, fichas):
     linea("BOLETÍN MUNICIPAL   /   MAÍZ GRANO", 10, 7, True, "#306651")
     linea(f["municipio"], 23, 12, True)
     linea(f"{config.ESTADOS_NOMBRE[f['cvegeo'][:2]]}  ·  Ciclo {f['anio']}  ·  Reconstrucción retrospectiva")
-    linea(f"Etapa de llenado   |   Datos al {f['fecha_datos']}")
+    linea(f"Etapa de llenado   |   Datos al {fecha_larga(f['fecha_datos'])}")
     pdf.ln(3)
     for f in fichas:
         nivel = f["prediccion"]["nivel"]

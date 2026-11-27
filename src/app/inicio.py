@@ -4,6 +4,7 @@ from html import escape
 import streamlit as st
 
 from src import config
+from src.app.fechas import fecha_larga
 from src.app.cliente import SinServicio, aviso_copia, copia, pedir
 from src.app.pages import tecnico
 
@@ -18,12 +19,11 @@ def productor(entrada, locales):
         pdf = pedir("/boletin/" + entrada["cvegeo"], pdf=True)
     except SinServicio:
         datos = locales or copia()
-        if not locales:
-            aviso_copia(datos)
         f = next((f for f in datos["fichas"] if all(f[k] == v for k,v in entrada.items())), None)
         if not f:
             st.info("Esta consulta no está en la copia local.")
             return
+        aviso_copia(datos, f["fecha_datos"])
         ruta = config.BOLETINES / (entrada["cvegeo"] + ".pdf")
         pdf = ruta.read_bytes() if ruta.exists() else None
     signo, nombre, color = config.NIVELES[f["prediccion"]["nivel"]]
@@ -34,7 +34,7 @@ def productor(entrada, locales):
           <h2 style="color:{color}">{signo} Riesgo {nombre.lower()}</h2>
           <p class="frecuencia">{escape(f['frecuencia'])}</p>
           <p>temporadas parecidas podrían perder más del 10 % de la superficie sembrada.</p>
-          <small>Datos al {escape(f['fecha_datos'])}  ·  {escape(f['aviso'])}</small></div>""")
+          <small>Clima observado hasta el {fecha_larga(f['fecha_datos'])}  ·  {escape(f['aviso'])}</small></div>""")
         if pdf:
             st.download_button("Descargar boletín municipal · PDF", pdf,
                                file_name=f"boletin-{entrada['cvegeo']}-{entrada['anio']}.pdf", mime="application/pdf")
@@ -64,7 +64,6 @@ def aplicacion():
         catalogo = pedir("/municipios")
     except SinServicio:
         locales = copia()
-        aviso_copia(locales)
         catalogo = locales["catalogo"]
     c1,c2,c3,c4 = st.columns([1,1.65,1,1.2])
     estado = c1.selectbox("Estado", list(config.ESTADOS_NOMBRE), index=1, format_func=config.ESTADOS_NOMBRE.get)
@@ -78,8 +77,10 @@ def aplicacion():
     if modo == "Productor":
         productor(entrada, locales)
     elif locales:
+        aviso_copia(locales)
         st.info("El historial, las explicaciones técnicas y el simulador requieren el servicio local. Las fichas y los boletines están disponibles en el modo Productor.")
     else:
+        st.caption(config.AVISO)
         try:
             tecnico.mostrar(entrada, modalidades)
         except SinServicio:
