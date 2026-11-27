@@ -1,6 +1,6 @@
 # Calidad observada en el piloto municipal
 
-Se aplicó el modelo de calidad del producto de [ISO/IEC 25010:2023, segunda edición](https://www.iso.org/standard/78176.html). La evaluación corresponde al equipo local y a la revisión reproducida del 27 de noviembre de 2026.
+Se aplicó el modelo de calidad del producto de [ISO/IEC 25010:2023, segunda edición](https://www.iso.org/standard/78176.html). La evaluación corresponde al equipo local y a la etiqueta v1.0-entrega del 27 de noviembre de 2026. Los tiempos HTTP corresponden al ensayo previo identificado en tiempos.json.
 
 | Característica | Prueba o evidencia | Resultado y alcance |
 | --- | --- | --- |
@@ -10,6 +10,6 @@ Se aplicó el modelo de calidad del producto de [ISO/IEC 25010:2023, segunda edi
 | Capacidad de interacción | Dos modos, texto/símbolo/color, fechas en palabras, cuestionario SUS y tareas sin ayuda. | La tarjeta se verificó técnicamente. El resultado con personas se declara en el Anexo G. |
 | Fiabilidad | Radio Wi‑Fi apagada con API activa; ensayo separado con API detenida. | Ficha y PDF recuperados en ambos. La simulación interactiva requiere la API local. |
 | Seguridad de la información | Servicio enlazado a loopback, validación de entradas y exportación por lista de campos. | El CSV contiene agregados municipales permitidos. El equipo compartido carece de autenticación individual. |
-| Mantenibilidad | Pruebas de módulos, D-001–D-036 y cobertura de sentencias bajo pytest. | 23 pruebas, 34 % de cobertura. La suite no ejecuta todo el entrenamiento ni la interfaz. |
+| Mantenibilidad | Pruebas de módulos, D-001–D-038 y cobertura de sentencias bajo pytest. | 23 pruebas, 35 % de cobertura en la etiqueta (618/1,785). La suite no ejecuta todo el entrenamiento ni la interfaz. |
 | Flexibilidad | Traslado a otra carpeta en Windows con Python y entorno virtual nuevos. | La actualización y las pruebas terminaron; la portabilidad a otros sistemas sigue abierta. |
 | Protección frente a daños | Restricciones parciales, aviso de extrapolación, banda de fechas y revisión humana prevista. | Se activó el aviso ante un extremo y se documentaron brechas. El efecto en decisiones de campo queda por evaluar. |

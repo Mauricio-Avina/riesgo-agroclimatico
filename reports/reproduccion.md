@@ -1,4 +1,10 @@
-# Reproducción desde cero del piloto · 27 de noviembre de 2026
+# Reproducción desde cero del piloto
+
+## Entrega congelada del 27 de noviembre de 2026
+
+Se descargó [v1.0-entrega](https://github.com/Mauricio-Avina/riesgo-agroclimatico/releases/tag/v1.0-entrega) desde GitHub en una carpeta nueva. Se creó un entorno Python 3.12.10 con requirements.txt y se restauraron los originales. actualizar.bat comenzó verificando las 98 huellas. Tardó 59.68 s. Pasaron las 23 pruebas, con 35 % de cobertura (618 de 1,785 sentencias). Cinco reportes coincidieron byte por byte. La instalación inicial en un directorio extenso alcanzó el límite de longitud de Windows. Se repitió en una ruta corta. [Revisión, huellas y tiempos](reproduccion_entrega.json) · [Salida de pytest de la etiqueta](pruebas.txt)
+
+## Ensayo anterior a la etiqueta
 
 Se clonó el repositorio con Git desde la copia local, con transferencia independiente de objetos. Se creó un entorno virtual vacío con Python 3.12.10 en Windows. El código ejecutado corresponde a [d47dc9c](https://github.com/Mauricio-Avina/riesgo-agroclimatico/commit/d47dc9c17dea0107594571c3b63adf13c7092677). La instalación usó pip y su caché de descargas. Ningún paquete se importó del entorno virtual de trabajo. El origen de los insumos fue la copia de bronce: se copiaron los 98 archivos listados y se verificó cada SHA-256 frente a la última entrada de su ruta en el manifiesto del clon.
 

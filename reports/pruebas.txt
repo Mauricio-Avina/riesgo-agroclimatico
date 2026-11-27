@@ -25,9 +25,9 @@ Name                          Stmts   Miss  Cover   Missing
 src\__init__.py                   0      0   100%
 src\api\__init__.py               0      0   100%
 src\api\control_siembra.py       61     61     0%   2-77
-src\api\esquemas.py              51      0   100%
-src\api\fichas.py                33     22    33%   10, 14, 20-42
-src\api\main.py                  62      3    95%   68, 73, 91
+src\api\esquemas.py              52      0   100%
+src\api\fichas.py                37      7    81%   10, 14, 26-32
+src\api\main.py                  62      2    97%   73, 91
 src\api\servicio.py             126      3    98%   53, 100, 112
 src\api\simulador.py             77      2    97%   37, 49
 src\app\__init__.py               0      0   100%
@@ -44,16 +44,16 @@ src\config.py                    82      0   100%
 src\etl\__init__.py               0      0   100%
 src\etl\archivos.py              51     51     0%   2-62
 src\etl\calidad.py               23     23     0%   2-44
-src\etl\clima.py                 71     71     0%   2-97
-src\etl\contraste_sequia.py      24     24     0%   2-33
+src\etl\clima.py                 68     68     0%   2-93
+src\etl\contraste_sequia.py      27     27     0%   2-39
 src\etl\economia.py              32     32     0%   2-42
-src\etl\esquemas.py              40      1    98%   47
+src\etl\esquemas.py              41      1    98%   49
 src\etl\manifiesto.py            65     65     0%   3-103
-src\etl\municipios.py            37     37     0%   2-49
+src\etl\municipios.py            31     31     0%   2-42
 src\etl\siap.py                  57     57     0%   2-79
 src\etl\sociedad.py              30     30     0%   2-44
 src\features\__init__.py          0      0   100%
-src\features\oro.py              43     43     0%   2-56
+src\features\oro.py              49     49     0%   2-64
 src\features\ventanas.py         30      3    90%   23, 25, 30
 src\models\__init__.py            0      0   100%
 src\models\__main__.py           43     43     0%   2-56
@@ -65,5 +65,5 @@ src\models\revision.py           70     70     0%   2-89
 src\pipeline.py                  24     24     0%   2-33
 src\registro.py                   5      5     0%   3-11
 -----------------------------------------------------------
-TOTAL                          1779   1183    34%
-======================== 23 passed, 1 warning in 6.56s ========================
+TOTAL                          1785   1167    35%
+======================== 23 passed, 1 warning in 7.12s ========================

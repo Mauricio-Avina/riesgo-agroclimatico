@@ -1,0 +1,33 @@
+{
+  "etiqueta": "v1.0-entrega",
+  "clonar_s": 3.6973923000041395,
+  "commit": "fcb64ee180547a9b722cca448cc2a6a63275c0ea",
+  "entorno_s": 3.109025100013241,
+  "instalar_s": 51.54674220003653,
+  "restaurar_s": 0.16637390002142638,
+  "archivos": 98,
+  "actualizar_s": 59.68130769999698,
+  "pytest_s": 8.385079900035635,
+  "comparacion": {
+    "revision_modelos": {
+      "coincide": true,
+      "sha256": "b39588e887d616c743e7e481e2a3a0822385f356c2d0ccf8be1fdbdc8cc2dcb0"
+    },
+    "revision_equidad": {
+      "coincide": true,
+      "sha256": "dc3b125a76a5fd4d143bccb23333a7e5ea84b478382a0de664a96a2f77e8ad2e"
+    },
+    "metricas_modelos": {
+      "coincide": true,
+      "sha256": "81a13895c7976b5aea7b2b91002992a8c6f64b0af6abcc99da856cf185cf3438"
+    },
+    "revision_quintiles": {
+      "coincide": true,
+      "sha256": "804506e39e5d11e2571021d896a8d6a204449be4f8b0e2418299f4873bb037bf"
+    },
+    "pronosticos_prueba": {
+      "coincide": true,
+      "sha256": "c63c6482db6f12c4d0a2c7fb69e1dffb9f33935507ca35d45c9b34adcce3d276"
+    }
+  }
+}
