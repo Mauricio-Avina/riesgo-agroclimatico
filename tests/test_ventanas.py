@@ -23,6 +23,15 @@ class VentanasTest(unittest.TestCase):
         fechas = fechas_por_etapa("2023-06-02", {"llenado": (0, 7)})
         self.assertEqual(calcular_ventanas(self.serie, 2023, fechas)["helada_llenado_dias"], 7)
 
+    def test_diez_dias_al_cruzar_el_fin_de_mes(self):
+        dias = pd.date_range("2020-06-27", periods=10)
+        serie = pd.DataFrame({"lluvia":[0,0,4,0,0,0,6,0,0,0], "tmax":25, "tmin":15, "radiacion":12}, index=dias)
+        original = calcular_ventanas(serie, 2020, fechas_por_etapa(dias[0], {"siembra":(0,6)}))
+        movida = calcular_ventanas(serie, 2020, fechas_por_etapa(dias[2], {"siembra":(0,6)}))
+        self.assertEqual(original["lluvia_siembra_mm"], 10)
+        self.assertEqual(movida["racha_seca_siembra_dias"], 3)
+        self.assertEqual(movida["gdd_siembra"], 70)
+
     def test_dia_ausente_no_cuenta_como_seco(self):
         fechas = fechas_por_etapa("2023-06-01", {"floracion": (0, 8)})
         incompleta = self.serie.drop(index=self.serie.index[3])
