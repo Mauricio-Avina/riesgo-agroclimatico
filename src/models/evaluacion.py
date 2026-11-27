@@ -144,5 +144,5 @@ def confiabilidad(t, horizonte, nombre, ruta):
         obs, estim = calibration_curve(t.perdida, t[col], n_bins=config.GRUPOS_CONFIABILIDAD, strategy="quantile")
         ax.plot(estim, obs, "o-", label=etiqueta)
     ax.set(xlabel="Probabilidad media pronosticada", ylabel="Proporción de pérdidas observada",
-           xlim=(0,1), ylim=(0,1), title=f"Confiabilidad en 2021–2025 · {nombre}")
+           xlim=(0,1), ylim=(0,1), title=f"Confiabilidad de {nombre} · {horizonte.replace('prefloracion', 'prefloración')}")
     ax.legend(); fig.savefig(ruta, dpi=config.DPI_MODELOS); plt.close(fig)

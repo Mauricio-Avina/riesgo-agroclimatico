@@ -92,3 +92,7 @@ NOMBRES_VARIABLES = {"lluvia_": "Lluvia", "racha_seca_": "Racha seca", "gdd_": "
                      "sembrada_ha": "Superficie sembrada (ha)", "marginacion_2020": "Índice de marginación",
                      "modalidad_": "Modalidad", "estado_": "Estado", "latitud": "Latitud",
                      "longitud": "Longitud", "area_km2": "Área municipal (km²)", "altitud_celda_m": "Altitud (m)"}
+
+NOMBRES_ETAPA = {"siembra": "siembra", "vegetativo": "crecimiento vegetativo",
+                 "floracion": "floración", "llenado": "llenado"}
+UNIDADES_CLIMA = {"mm": "mm", "dias": "días", "mj_m2_dia": "MJ/m²/día"}
