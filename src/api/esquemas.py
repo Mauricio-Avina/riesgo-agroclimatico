@@ -43,6 +43,7 @@ class Prediccion(BaseModel):
 
 class Factor(BaseModel):
     variable: str
+    valor: str
     direccion: Literal["eleva", "reduce", "neutra"]
     aporte: float
 

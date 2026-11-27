@@ -37,6 +37,11 @@ def ficha(servicio, entrada):
             nombre = factor["variable"]
             if nombre == "Modalidad":
                 nombre = f"Modalidad de {modalidad.lower()}"
+            else:
+                etiqueta, _, unidad = nombre.partition(" (")
+                nombre = f"{etiqueta}: {factor['valor']}"
+                if unidad:
+                    nombre += " " + unidad.removesuffix(")")
             factores.append(f"{nombre} · {frases[factor['direccion']]}")
         origen = "Qué influyó frente al riesgo de referencia del modelo"
     return dict(**entrada.model_dump(mode="json"), municipio=servicio.municipios(entrada.cvegeo)[0]["municipio"],

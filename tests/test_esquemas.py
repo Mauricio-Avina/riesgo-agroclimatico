@@ -17,6 +17,6 @@ class ValidacionTest(unittest.TestCase):
     def test_lluvia_negativa(self):
         """Un dato imposible falla en su propia columna antes del control de calendario."""
         tabla = pd.DataFrame([dict(cvegeo="22001", fecha=pd.Timestamp("2025-06-01"),
-            tmax=25., tmin=10., lluvia=-1., radiacion=20., humedad=50.)])
+            altitud_celda_m=1800., tmax=25., tmin=10., lluvia=-1., radiacion=20., humedad=50.)])
         with self.assertRaisesRegex(SchemaError, "lluvia"):
             ESQUEMAS["clima_diario"].validate(tabla)

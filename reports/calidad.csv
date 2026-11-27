@@ -17,7 +17,6 @@ Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interi
 Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,latitud,,0.000000,,0.000000
 Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,longitud,,0.000000,,0.000000
 Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,area_km2,,0.000000,,0.000000
-Geografía,64,64,Polígonos de los dos estados; cálculo de área y punto interior,variable,altitud_celda_m,,0.000000,,0.000000
 POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,fuente,,,,,
 POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,cvegeo,,0.000000,,0.000000
 POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,fecha,,0.000000,,0.000000
@@ -26,6 +25,7 @@ POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la e
 POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,lluvia,0.000000,0.000000,0.000000,0.000000
 POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,radiacion,0.000000,0.000000,0.000000,0.000000
 POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,humedad,0.000000,0.000000,0.000000,0.000000
+POWER,537664,537664,Un día por punto; -999 se reconoce como faltante desde la entrada,variable,altitud_celda_m,0.000000,0.000000,0.000000,0.000000
 INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,fuente,,,,,
 INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,variable,anio,0.000000,0.000000,0.000000,0.000000
 INPC,682,23,Serie mensual completa; selección de 2003–2025 y promedio de doce meses,variable,inpc,0.000000,0.000000,0.000000,0.000000

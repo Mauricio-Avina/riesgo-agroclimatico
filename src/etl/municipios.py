@@ -1,5 +1,4 @@
 """Puntos interiores y superficie municipal del Marco Geoestadístico del INEGI."""
-import json
 import logging
 
 import geopandas as gpd
@@ -32,14 +31,8 @@ def main(auditoria=None):
                                         latitud=puntos.y, longitud=puntos.x,
                                         area_km2=poligonos.area / 1e6)))
     tabla = pd.concat(partes).sort_values("cvegeo").reset_index(drop=True)
-    if tabla.cvegeo.duplicated().any() or len(tabla) != 64:
-        raise ValueError("Se esperaban 64 municipios distintos")
-    # Si ya existe una serie, la ejecución geográfica aislada conserva su elevación.
-    alturas = []
-    for clave in tabla.cvegeo:
-        ruta = config.BRONCE / "power" / f"{clave}.json"
-        alturas.append(json.loads(ruta.read_bytes())["geometry"]["coordinates"][2] if ruta.exists() else None)
-    tabla["altitud_celda_m"] = pd.array(alturas, dtype="Float64")
+    if tabla.cvegeo.duplicated().any() or len(tabla) != config.MUNICIPIOS_ESPERADOS:
+        raise ValueError(f"Se esperaban {config.MUNICIPIOS_ESPERADOS} municipios distintos")
     guardar_parquet(tabla, config.PLATA / "municipios.parquet")
     log.info("Municipios: %d polígonos y %d puntos interiores.", len(tabla), len(tabla))
 

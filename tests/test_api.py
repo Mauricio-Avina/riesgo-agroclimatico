@@ -52,6 +52,10 @@ class PruebaAPI(unittest.TestCase):
         self.assertEqual(pron["probabilidad"], round(float(esperado), 4))
         self.assertEqual(pron["p10"], pron["p90"])
         self.assertEqual(pron["escenarios"], 1)
+        ficha = self.post("ficha", ultima_etapa="llenado").json()
+        for factor in ficha["factores"]:
+            if not factor.startswith("Modalidad"):
+                self.assertRegex(factor, r": \d+(\.\d+)? (mm|días) ·")
 
     def test_analogos_y_explicacion(self):
         peticion = self.ejemplo | {"ultima_etapa":"vegetativo"}

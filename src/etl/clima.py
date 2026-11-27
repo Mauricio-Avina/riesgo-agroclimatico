@@ -35,6 +35,7 @@ def json_a_tabla(ruta, auditoria=None):
     """Convierte la respuesta diaria de POWER y reconoce su código de ausencia."""
     datos = json.loads(ruta.read_bytes())
     serie = pd.DataFrame(datos["properties"]["parameter"])[list(VARIABLES)].rename(columns=VARIABLES)
+    serie["altitud_celda_m"] = pd.array([datos["geometry"]["coordinates"][2]] * len(serie), dtype="Float64")
     if auditoria is not None:
         auditoria.entrada("POWER", serie.replace(-999, float("nan")))
     serie.index = pd.to_datetime(serie.index, format="%Y%m%d")
@@ -72,22 +73,17 @@ def cotejar_lluvia(clima):
 
 
 def main(auditoria=None):
-    """Publica el clima diario y completa la altitud de las celdas."""
+    """Publica el clima diario con la altitud de la celda consultada."""
     tabla = pd.read_parquet(config.PLATA / "municipios.parquet")
     partes = []
-    alturas = []
     for fila in tabla.itertuples(index=False):
         ruta = descargar_municipio(fila.cvegeo, fila.latitud, fila.longitud)
         partes.append(json_a_tabla(ruta, auditoria))
-        alturas.append(json.loads(ruta.read_bytes())["geometry"]["coordinates"][2])
     clima = pd.concat(partes, ignore_index=True)
     if clima.duplicated(["cvegeo", "fecha"]).any():
         raise ValueError("Clave municipio-día duplicada")
     guardar_parquet(clima, config.PLATA / "clima_diario.parquet")
     log.info("Clima: nulos por variable %s.", clima[list(VARIABLES.values())].isna().sum().to_dict())
-    # Al descargar la serie ya está disponible la elevación que reporta la celda.
-    tabla["altitud_celda_m"] = pd.array(alturas, dtype="Float64")
-    guardar_parquet(tabla, config.PLATA / "municipios.parquet")
     cotejar_lluvia(clima)
     log.info("Clima: %d días-municipio de %d series.", len(clima), len(tabla))
 

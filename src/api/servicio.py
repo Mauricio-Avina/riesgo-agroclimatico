@@ -146,11 +146,11 @@ class Servicio:
         cantidad = len(elegibles) if vista == "tecnica" else config.N_TEXTO
         for var in elegibles.abs().nlargest(cantidad).index:
             valor = float(aportes[var])
-            factores.append(dict(variable=etiqueta(var),
-                                 direccion="eleva" if valor > 0 else "reduce" if valor < 0 else "neutra",
-                                 aporte=valor))
             observado = (str(matriz[var].iloc[0]) if var in config.CATEGORICAS_MODELO
                          else f"{matriz[var].mean():.1f}")
+            factores.append(dict(variable=etiqueta(var), valor=observado,
+                                 direccion="eleva" if valor > 0 else "reduce" if valor < 0 else "neutra",
+                                 aporte=valor))
             senales.append(f"{etiqueta(var)} = {observado} ({factores[-1]['direccion']})")
         texto = (f"El riesgo estimado es {pronostico['probabilidad']:.1%} y el aviso es {pronostico['nivel']}. "
                  f"Los mayores aportes respecto de la base del modelo fueron {', '.join(senales)}.")

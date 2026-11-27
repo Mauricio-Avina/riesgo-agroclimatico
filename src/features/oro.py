@@ -36,7 +36,15 @@ def main(auditoria=None):
             registros.append(dict(cvegeo=clave, anio=anio, fecha_siembra_escenario=siembra, **indicadores))
     oro = unir(oro, pd.DataFrame(registros), ["cvegeo", "anio"], "clima por etapa")
     for nombre, llave in [("municipios", "cvegeo"), ("marginacion", "cvegeo"), ("inpc", "anio")]:
-        oro = unir(oro, pd.read_parquet(config.PLATA / f"{nombre}.parquet"), [llave], nombre)
+        dimension = pd.read_parquet(config.PLATA / f"{nombre}.parquet")
+        if nombre == "municipios" and "altitud_celda_m" in clima:
+            # Con plata de una versión anterior, la altitud ya venía en municipios.
+            alturas = clima[["cvegeo", "altitud_celda_m"]].drop_duplicates()
+            dimension = dimension.drop(columns="altitud_celda_m", errors="ignore").merge(
+                alturas, on="cvegeo", how="left", validate="one_to_one")
+            if dimension.altitud_celda_m.isna().any():
+                raise ValueError("Falta la altitud POWER de un municipio")
+        oro = unir(oro, dimension, [llave], nombre)
     if auditoria is not None:
         auditoria.entrada("Oro", oro)
     for nominal in ["precio_pesos_t", "valor_produccion_pesos"]:

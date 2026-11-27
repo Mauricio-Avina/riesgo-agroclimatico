@@ -21,7 +21,7 @@ def leer_municipios(ruta, auditoria=None):
     tabla["cvegeo"] = tabla.cvegeo.str.zfill(5)
     tabla = tabla.loc[tabla.cvegeo.str[:2].isin(config.ESTADOS_MODELO)].copy()
     tabla["marginacion_2020"] = pd.to_numeric(tabla.marginacion_2020)
-    if len(tabla) != 64 or tabla.cvegeo.duplicated().any() or tabla.isna().any().any():
+    if len(tabla) != config.MUNICIPIOS_ESPERADOS or tabla.cvegeo.duplicated().any() or tabla.isna().any().any():
         raise ValueError("Revisar claves y cobertura de la marginación")
     return tabla.sort_values("cvegeo").reset_index(drop=True)
 

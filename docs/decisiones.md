@@ -295,3 +295,19 @@ En el boosting, las cinco primeras columnas por media de |SHAP| fueron el indica
 ## D-036 · 27/11/2026 · Selección de decisiones para la fundamentación
 
 **Contexto y alternativas.** Enumerar todas las decisiones del diario consumiría el espacio de 3.6 sin aclarar qué alternativa se descartó. **Decisión y razón.** Elegir catorce decisiones que cambian la unidad de análisis, la validez temporal, la interpretación del riesgo, el acceso al aviso o la gobernanza; contrastar cada una con una alternativa, una fuente y evidencia local. **Consecuencias.** La tabla mantiene la trazabilidad de las decisiones centrales. Las reglas operativas y su historial permanecen en este diario, referenciado en el Anexo H. [Fundamentación de las 14 decisiones](fundamentacion.md)
+
+## D-037 · 27/11/2026 · Veredicto y verificación de objetivos
+
+**Contexto.** Se eligió la familia de boosting por precisión promedio en los pliegues temporales de desarrollo (D-022). Las restricciones posteriores respondieron a RF-07 tras haberse examinado la prueba. Esta versión conserva ese antecedente y requiere una validación prospectiva.
+
+**Alternativas y decisión.** Se consideró sustituir el modelo por la logística o la red, que alcanzaron BSS de 0.267 [0.147, 0.432] y 0.255 [0.130, 0.422]. Se mantuvo el boosting restringido desde vegetativo y la climatología calibrada en siembra. Elegir de nuevo con 2021–2025 convertiría el periodo de prueba en un criterio de selección. A temporada completa, el modelo en servicio obtuvo BSS 0.167 [−0.123, 0.443]. La hipótesis de mejora frente a la climatología municipal se sostiene en parte. Los intervalos corresponden al BSS de cada modelo frente a la referencia. Una diferencia significativa entre modelos requeriría otro contraste.
+
+**Consecuencias.** El siguiente ciclo debe comparar prospectivamente las probabilidades registradas antes de la cosecha. En la Tabla 17 se declara cumplido un objetivo cuando se verificaron todos sus criterios, parcial cuando alguno quedó por comprobar o bajo el umbral y pendiente cuando carece de evidencia. La operación técnica, la usabilidad observada y la reducción de pérdidas se evalúan por separado.
+
+## D-038 · 27/11/2026 · Versión de entrega y reconstrucción
+
+**Contexto y alternativas.** Una rama puede avanzar entre la entrega y la réplica. Se eligió una etiqueta anotada para conservar la revisión exacta del software y de los requisitos usados en la defensa.
+
+**Decisión y razón.** La etiqueta v1.0-entrega congela la configuración, los modelos que se reconstruyen, las pruebas y el comando de actualización. Este comienza por comprobar las huellas de los datos de bronce. Se conserva la etiqueta y se permiten después únicamente ajustes de documentación y evidencias de la entrega.
+
+**Consecuencias.** El Anexo H identifica la revisión descargable, las condiciones de instalación y el resultado de comparar los cinco archivos de evaluación. La fecha de la etiqueta registra el cierre técnico previo al examen programado para el 5 de diciembre.

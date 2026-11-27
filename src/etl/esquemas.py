@@ -5,7 +5,8 @@ import pandera.pandas as pa
 from src import config
 
 C = pa.Check
-clave = pa.Column(str, C.str_matches(r"^(11|22)\d{3}$"))
+clave = pa.Column(str, [C.str_matches(r"^\d{5}$"),
+                        C(lambda s: s.str[:2].isin(config.ESTADOS_MODELO), name="estado_del_piloto")])
 anio = pa.Column(int, C.isin(list(config.ANIOS)))
 modalidad = pa.Column(str, C.isin(config.MODALIDADES))
 llave = ["cvegeo", "anio", "modalidad"]
@@ -32,10 +33,11 @@ agr["siniestralidad"] = numero(C.in_range(0, 1), True)
 superficie = C(lambda d: d.cosechada_ha.le(d.sembrada_ha) & d.siniestrada_ha.le(d.sembrada_ha),
                name="superficies_no_superan_la_sembrada")
 geo = dict(cvegeo=clave, municipio=pa.Column(str), latitud=numero(C.in_range(-90, 90)),
-           longitud=numero(C.in_range(-180, 180)), area_km2=numero(C.gt(0)), altitud_celda_m=numero())
+           longitud=numero(C.in_range(-180, 180)), area_km2=numero(C.gt(0)))
 soc = dict(cvegeo=clave, marginacion_2020=numero(), grado_marginacion_2020=pa.Column(str))
 eco = dict(anio=anio, inpc=numero(C.gt(0)), factor_pesos_constantes=numero(C.gt(0)))
-diario = dict(cvegeo=clave, fecha=columnas_fecha(), tmax=numero(C.ne(-999), True),
+altitud = numero(C.ne(-999))
+diario = dict(altitud_celda_m=altitud, cvegeo=clave, fecha=columnas_fecha(), tmax=numero(C.ne(-999), True),
               tmin=numero(C.ne(-999), True), lluvia=numero(C.ge(0), True),
               radiacion=numero(C.ge(0), True), humedad=numero(C.in_range(0, 100), True))
 inicio = pd.Timestamp(config.ANIO_INICIAL, 1, 1)
@@ -45,10 +47,10 @@ fin = pd.Timestamp(config.ANIO_FINAL, 12, 31)
 def calendario_completo(d):
     """La unicidad municipio-fecha y estos límites aseguran un calendario sin huecos."""
     return (d.fecha.between(inicio, fin).all() and d.fecha.eq(d.fecha.dt.normalize()).all()
-            and d.groupby("cvegeo").size().eq((fin - inicio).days + 1).all() and d.cvegeo.nunique() == 64)
+            and d.groupby("cvegeo").size().eq((fin - inicio).days + 1).all() and d.cvegeo.nunique() == config.MUNICIPIOS_ESPERADOS)
 
 
-comunes = {**agr, **geo, **soc, **eco, "fecha_siembra_escenario": columnas_fecha()}
+comunes = {**agr, **geo, **soc, **eco, "altitud_celda_m": altitud, "fecha_siembra_escenario": columnas_fecha()}
 for etapa, (primero, ultimo) in config.ETAPAS.items():
     for col in [f"lluvia_{etapa}_mm", f"radiacion_{etapa}_mj_m2_dia", f"gdd_{etapa}"]:
         comunes[col] = numero(C.ge(0), True)
@@ -59,7 +61,7 @@ for col, etapa in [("calor_floracion_dias", "floracion"), ("helada_llenado_dias"
 for col in ["precio_pesos_t", "valor_produccion_pesos"]:
     comunes[f"{col}_de_{config.ANIO_BASE_PRECIOS}"] = numero(C.ge(0), col == "precio_pesos_t")
 
-municipales = C(lambda d: len(d) == 64, name="64_municipios")
+municipales = C(lambda d: len(d) == config.MUNICIPIOS_ESPERADOS, name="municipios_esperados")
 ESQUEMAS = {
     "siap_maiz_pv": pa.DataFrameSchema(agr, unique=llave, checks=superficie, strict=True),
     "municipios": pa.DataFrameSchema(geo, unique=["cvegeo"], checks=municipales, strict=True),
