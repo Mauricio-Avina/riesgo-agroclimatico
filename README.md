@@ -58,3 +58,7 @@ En Windows, abre `iniciar.bat` en la raíz del proyecto para consultar la aplica
 Con las dependencias de `requirements.txt` en el entorno `.venv`, `actualizar.bat` ejecuta la integración de datos, entrena los modelos y regenera las fichas y los boletines. Cierra y vuelve a abrir la aplicación para cargar los modelos nuevos. Con los datos y los modelos ya instalados, `python -m src.app.precalcular` regenera solo la distribución local.
 
 [Usuarios y protocolo de prueba](docs/usuarios.md) · [Evidencia de operación local](reports/evidencias_dia8/verificacion.md) · [Boletín de ejemplo](reports/boletin_ejemplo.pdf)
+
+## Reproducción verificada
+
+Con Python 3.12 en Windows, crea un entorno vacío con `py -3.12 -m venv .venv` y ejecuta `.venv\Scripts\python -m pip install -r requirements.txt`. Copia los originales a sus rutas bajo `data/bronce` y conserva el manifiesto versionado en Git. Ejecuta `.venv\Scripts\python -m scripts.verificar_bronce`; si alguna huella difiere, restaura la versión indicada. Después ejecuta `actualizar.bat` y `.venv\Scripts\python -m pytest --cov=src --cov-report=term-missing`. [Registro de la reproducción](reports/reproduccion.md) · [Ficha del modelo](docs/ficha_modelo.md) · [Plan de adopción](docs/adopcion.md)

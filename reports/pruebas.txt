@@ -1,0 +1,69 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0
+rootdir: .
+plugins: anyio-4.16.0, platformdirs-4.14.8, cov-7.1.0, typeguard-4.6.1
+collected 23 items
+
+tests\test_api.py .......                                                [ 30%]
+tests\test_esquemas.py ..                                                [ 39%]
+tests\test_particion.py ...                                              [ 52%]
+tests\test_simulacion.py ......                                          [ 78%]
+tests\test_sus.py ..                                                     [ 86%]
+tests\test_ventanas.py ...                                               [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  .\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                          Stmts   Miss  Cover   Missing
+-----------------------------------------------------------
+src\__init__.py                   0      0   100%
+src\api\__init__.py               0      0   100%
+src\api\control_siembra.py       61     61     0%   2-77
+src\api\esquemas.py              51      0   100%
+src\api\fichas.py                33     22    33%   10, 14, 20-42
+src\api\main.py                  62      3    95%   68, 73, 91
+src\api\servicio.py             126      3    98%   53, 100, 112
+src\api\simulador.py             77      2    97%   37, 49
+src\app\__init__.py               0      0   100%
+src\app\boletines.py             37     37     0%   2-43
+src\app\cliente.py               29     29     0%   2-41
+src\app\fechas.py                 5      5     0%   2-10
+src\app\iniciar.py               46     46     0%   2-58
+src\app\inicio.py                68     68     0%   2-90
+src\app\pages\__init__.py         0      0   100%
+src\app\pages\tecnico.py         73     73     0%   1-95
+src\app\precalcular.py           43     43     0%   2-52
+src\app\sus.py                   55     37    33%   17-18, 26, 28, 33-65, 69
+src\config.py                    82      0   100%
+src\etl\__init__.py               0      0   100%
+src\etl\archivos.py              51     51     0%   2-62
+src\etl\calidad.py               23     23     0%   2-44
+src\etl\clima.py                 71     71     0%   2-97
+src\etl\contraste_sequia.py      24     24     0%   2-33
+src\etl\economia.py              32     32     0%   2-42
+src\etl\esquemas.py              40      1    98%   47
+src\etl\manifiesto.py            65     65     0%   3-103
+src\etl\municipios.py            37     37     0%   2-49
+src\etl\siap.py                  57     57     0%   2-79
+src\etl\sociedad.py              30     30     0%   2-44
+src\features\__init__.py          0      0   100%
+src\features\oro.py              43     43     0%   2-56
+src\features\ventanas.py         30      3    90%   23, 25, 30
+src\models\__init__.py            0      0   100%
+src\models\__main__.py           43     43     0%   2-56
+src\models\busqueda.py           76     38    50%   40, 51, 56-69, 74-116
+src\models\evaluacion.py         96     66    31%   20-29, 34-37, 44-56, 61-72, 85-104, 109-111, 119, 126-128, 136-141, 146-153
+src\models\explicacion.py        91     69    24%   24, 30-41, 47-54, 59-123
+src\models\objetivo.py           23      2    91%   13, 25
+src\models\revision.py           70     70     0%   2-89
+src\pipeline.py                  24     24     0%   2-33
+src\registro.py                   5      5     0%   3-11
+-----------------------------------------------------------
+TOTAL                          1779   1183    34%
+======================== 23 passed, 1 warning in 6.56s ========================
