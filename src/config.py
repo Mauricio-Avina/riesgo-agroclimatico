@@ -14,6 +14,7 @@ REGISTRO_ETL = REPORTES / "etl.log"
 
 ESTADO_PILOTO = "22"  # Querétaro (D-003)
 ESTADOS_MODELO = ("11", ESTADO_PILOTO)  # Guanajuato y Querétaro (D-004)
+MUNICIPIOS_ESPERADOS = 64  # Cobertura conjunta de D-004.
 ANIO_INICIAL = 2003
 ANIO_FINAL = 2025
 ANIOS = range(ANIO_INICIAL, ANIO_FINAL + 1)
@@ -96,3 +97,8 @@ NOMBRES_VARIABLES = {"lluvia_": "Lluvia", "racha_seca_": "Racha seca", "gdd_": "
 NOMBRES_ETAPA = {"siembra": "siembra", "vegetativo": "crecimiento vegetativo",
                  "floracion": "floración", "llenado": "llenado"}
 UNIDADES_CLIMA = {"mm": "mm", "dias": "días", "mj_m2_dia": "MJ/m²/día"}
+
+PREFIJO_API = "/v1"
+CUANTILES_ANALOGOS = (0.10, 0.90)
+EJEMPLO_API = {"cvegeo": "11032", "modalidad": "Temporal", "anio": 2023,
+               "ultima_etapa": "llenado"}

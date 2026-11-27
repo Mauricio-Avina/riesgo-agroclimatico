@@ -1,0 +1,58 @@
+"""Contrato tipado de las cuatro operaciones del piloto."""
+from enum import Enum
+from typing import Annotated, Literal
+
+from pydantic import BaseModel, ConfigDict, Field
+
+from src import config
+
+Clave = Annotated[str, Field(pattern=r"^[0-9]{5}$", description="Clave municipal INEGI de cinco dígitos")]
+Modalidad = Enum("Modalidad", {m: m for m in config.MODALIDADES}, type=str)
+Etapa = Enum("Etapa", {e: e for e in config.ETAPAS}, type=str)
+
+
+class Solicitud(BaseModel):
+    model_config = ConfigDict(extra="forbid", json_schema_extra={"examples": [config.EJEMPLO_API]})
+    cvegeo: Clave
+    modalidad: Modalidad
+    anio: int = Field(strict=True, ge=config.ANIO_INICIAL, le=config.ANIO_FINAL)
+    ultima_etapa: Etapa
+
+
+class Salud(BaseModel):
+    estado: str
+    modelo: str
+
+
+class Municipio(BaseModel):
+    cvegeo: Clave
+    municipio: str
+    modalidades: list[Modalidad]
+
+
+class Prediccion(BaseModel):
+    probabilidad: float
+    nivel: Literal["verde", "amarillo", "rojo"]
+    p10: float
+    p90: float
+    escenarios: int
+    anios_analogos: list[int]
+
+
+class Factor(BaseModel):
+    variable: str
+    direccion: Literal["eleva", "reduce", "neutra"]
+    aporte: float
+
+
+class Explicacion(BaseModel):
+    prediccion: Prediccion
+    escala: str
+    base: float
+    salida_media: float
+    factores: list[Factor]
+    texto: str
+
+
+class ErrorAPI(BaseModel):
+    detalle: str
