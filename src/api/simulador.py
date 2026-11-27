@@ -1,4 +1,5 @@
 """Contrastes pareados sobre tres temporadas históricas de un municipio."""
+from datetime import date, timedelta
 from functools import lru_cache
 
 import numpy as np
@@ -50,6 +51,17 @@ class Simulador:
             base[col] = valor
         return predictores(base, "completa")
 
+    def banda_fecha(self, clave, palanca, anio, central):
+        """Rango local en las fechas vecinas válidas, con idéntico año y modalidad."""
+        fecha = date.fromisoformat(f"{anio}-{palanca.fecha}")
+        vecinas = [(fecha + timedelta(days=d)).strftime("%m-%d") for d in (-1, 0, 1)]
+        fechas = [f for f in vecinas if config.FECHAS_SIM[0] <= f <= config.FECHAS_SIM[1]]
+        matrices = [central if f == palanca.fecha else self.matriz(clave, palanca.model_copy(update={"fecha":f}), anio)
+                    for f in fechas]
+        probs = self.servicio.calibrado.predict_proba(pd.concat(matrices))[:, 1]
+        return float(probs[fechas.index(palanca.fecha)]), dict(
+            desde=fechas[0], hasta=fechas[-1], minimo=round(float(probs.min()),4), maximo=round(float(probs.max()),4))
+
     def fuera(self, fila):
         return [dict(variable=etiqueta(v), valor=float(fila[v]), p01=float(self.limites.at[.01,v]),
                      p99=float(self.limites.at[.99,v])) for v in self.limites
@@ -77,11 +89,11 @@ class Simulador:
             modalidad = palanca.modalidad.value
             for clima, anio in anios.items():
                 matriz = self.matriz(clave, palanca, anio)
-                p = float(self.servicio.calibrado.predict_proba(matriz)[0,1])
+                p, banda = self.banda_fecha(clave, palanca, anio, matriz)
                 nivel = str(clasificar(np.array([p]), self.servicio.costos)[0])
                 resultados.append(dict(caso=caso, clima=clima, anio=anio, modalidad=modalidad, fecha=palanca.fecha,
                                        probabilidad=round(p,4), nivel=nivel, perdida_esperada_ha=round(p*self.perdida_ha[modalidad],2),
-                                       fuera_de_rango=self.fuera(matriz.iloc[0])))
+                                       banda_fecha=banda, fuera_de_rango=self.fuera(matriz.iloc[0])))
                 if caso == "A" and clima == "Normal":
                     tornado = self.tornado(matriz)
         return dict(resultados=resultados, tornado=tornado, aviso=config.AVISO_SIMULACION,

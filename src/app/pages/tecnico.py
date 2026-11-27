@@ -56,12 +56,18 @@ def simulador(entrada, modalidades):
     x = guardado[1]
     st.write(x["aviso"])
     filas = pd.DataFrame(x["resultados"])
-    vista = filas.drop(columns="fuera_de_rango").copy()
+    vista = filas.drop(columns=["fuera_de_rango", "banda_fecha"]).copy()
     vista["nivel"] = vista.nivel.map(lambda v: config.NIVELES[v][1])
     vista.columns = ["Opción","Clima","Año","Modalidad","Siembra (mes-día)","Probabilidad","Nivel","Pérdida (MXN/ha)"]
     st.subheader("Pérdida esperada por hectárea")
     st.caption("Pesos de 2025 · Menor pérdida esperada indica la opción más favorable para ese clima.")
-    st.bar_chart(vista,x="Clima",y="Pérdida (MXN/ha)",color="Opción",stack=False)
+    barras = alt.Chart(vista).mark_bar().encode(
+        x=alt.X("Clima:N", sort=["Seco","Normal","Húmedo"]), xOffset="Opción:N",
+        y=alt.Y("Pérdida (MXN/ha):Q"), color=alt.Color("Opción:N",
+            scale=alt.Scale(domain=["A","B","C"],range=["#315e78","#b3741c","#755194"])))
+    st.altair_chart(barras, width="stretch")
+    vista["Rango de riesgo (±1 día)"] = filas.banda_fecha.map(lambda b: f"{b['minimo']:.1%} – {b['maximo']:.1%}")
+    st.caption("El rango compara la siembra elegida con el día anterior y el siguiente, dentro de las fechas admitidas. Si los rangos se superponen, la ventaja depende de la fecha exacta.")
     st.dataframe(vista, hide_index=True, width="stretch")
     avisos = [dict(Opción=r["caso"],Clima=r["clima"],**a) for r in x["resultados"] for a in r["fuera_de_rango"]]
     if avisos:

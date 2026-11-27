@@ -1,0 +1,11 @@
+variable,p10,p90,cambio_pp
+Lluvia en llenado (mm),0.6664,0.3607,-30.56
+Lluvia en crecimiento vegetativo (mm),0.5385,0.2569,-28.16
+Racha seca en crecimiento vegetativo (días),0.2754,0.4551,17.97
+Lluvia en siembra (mm),0.4626,0.3814,-8.12
+Lluvia en floración (mm),0.4642,0.4394,-2.48
+Racha seca en llenado (días),0.4551,0.463,0.79
+Racha seca en siembra (días),0.4551,0.4551,0.0
+Racha seca en floración (días),0.4551,0.4551,0.0
+Días de calor en floración (días),0.4551,0.4551,0.0
+Días de helada en llenado (días),0.4551,0.4551,0.0

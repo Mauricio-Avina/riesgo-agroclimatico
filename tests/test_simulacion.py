@@ -34,6 +34,16 @@ class PruebaSimulacion(unittest.TestCase):
             y=self.c.post("/v1/prediccion",json=dict(cvegeo="11032",modalidad="Temporal",anio=r["anio"],ultima_etapa="llenado")).json()
             self.assertEqual((r["probabilidad"],r["nivel"]),(y["probabilidad"],y["nivel"]))
 
+    def test_banda_de_fechas_y_limites(self):
+        sim = app.state.simulador
+        for fecha, primero, ultimo in [("06-01","06-01","06-02"),("06-15","06-14","06-16"),("07-15","07-14","07-15")]:
+            palanca = Palanca(modalidad="Temporal", fecha=fecha)
+            matriz = sim.matriz("11032", palanca, 2005)
+            p, banda = sim.banda_fecha("11032", palanca, 2005, matriz)
+            self.assertEqual((banda["desde"], banda["hasta"]), (primero, ultimo))
+            self.assertLessEqual(banda["minimo"], round(p,4))
+            self.assertLessEqual(round(p,4), banda["maximo"])
+
     def test_variables_y_extremos(self):
         sim=app.state.simulador
         oro=sim.historia.query("cvegeo=='11032' and anio==2005 and modalidad=='Temporal'").iloc[0]

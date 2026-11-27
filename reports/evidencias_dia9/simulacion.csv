@@ -1,0 +1,10 @@
+caso,clima,anio,modalidad,fecha,probabilidad,nivel,perdida_esperada_ha,fuera_de_rango,banda_fecha.desde,banda_fecha.hasta,banda_fecha.minimo,banda_fecha.maximo
+A,Seco,2005,Temporal,06-15,0.7072,rojo,2570.37,0,06-14,06-16,0.6694,0.7072
+A,Normal,2006,Temporal,06-15,0.4551,amarillo,1654.31,0,06-14,06-16,0.3979,0.4551
+A,Húmedo,2004,Temporal,06-15,0.3284,amarillo,1193.69,0,06-14,06-16,0.2483,0.3284
+B,Seco,2005,Temporal,07-01,0.6911,rojo,2512.07,1,06-30,07-02,0.6685,0.6911
+B,Normal,2006,Temporal,07-01,0.5297,amarillo,1925.42,0,06-30,07-02,0.4406,0.5425
+B,Húmedo,2004,Temporal,07-01,0.2282,amarillo,829.45,0,06-30,07-02,0.2282,0.3076
+C,Seco,2005,Riego,06-15,0.0398,verde,423.83,0,06-14,06-16,0.0271,0.0398
+C,Normal,2006,Riego,06-15,0.0253,verde,270.13,0,06-14,06-16,0.0204,0.0253
+C,Húmedo,2004,Riego,06-15,0.0208,verde,221.61,0,06-14,06-16,0.0208,0.0234
