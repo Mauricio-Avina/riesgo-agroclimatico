@@ -31,7 +31,8 @@ class Municipio(BaseModel):
 
 
 class Prediccion(BaseModel):
-    fuente: Literal["climatologia", "boosting_monotono"]
+    fuente: Literal["climatologia", "boosting_monotono"] = Field(
+        description="Climatología con Platt en siembra y boosting restringido con Platt desde vegetativo.")
     probabilidad: float
     nivel: Literal["verde", "amarillo", "rojo"]
     p10: float | None

@@ -4,13 +4,11 @@ import numpy as np
 import pandas as pd
 import shap
 from sklearn.base import clone
-from sklearn.calibration import CalibratedClassifierCV
-from sklearn.frozen import FrozenEstimator
 from threadpoolctl import threadpool_limits
 
 from src import config
 from src.models.busqueda import CLAVES
-from src.models.evaluacion import clasificar, confiabilidad, evaluar_corte, semaforo
+from src.models.evaluacion import ajustar_platt, clasificar, confiabilidad, evaluar_corte, semaforo
 from src.models.explicacion import equidad, explicar
 from src.models.objetivo import cargar, grupos, predictores
 
@@ -21,10 +19,7 @@ def ajustar(partes, original):
     modelo.set_params(modelo__monotonic_cst=config.DIRECCIONES_RF07)
     train, val = partes["entrenamiento"], partes["validacion"]
     modelo.fit(predictores(train, "completa"), train.perdida)
-    bloque = np.arange(len(val))
-    calibrado = CalibratedClassifierCV(FrozenEstimator(modelo), method="sigmoid",
-                                       cv=[(bloque, bloque)], ensemble=False)
-    calibrado.fit(predictores(val, "completa"), val.perdida)
+    calibrado = ajustar_platt(modelo, predictores(val, "completa"), val.perdida)
     joblib.dump(calibrado, config.ARTEFACTOS / "completa_boosting_monotono_platt.joblib")
     return modelo, calibrado
 
@@ -40,8 +35,9 @@ def direcciones(x, prueba, modelo, calibrado, version):
         cortes = np.unique(np.quantile(x[col], np.linspace(0, 1, 11)))
         probabilidades = [calibrado.predict_proba(x.assign(**{col: v}))[:, 1] for v in cortes]
         delta = signo * np.diff(probabilidades, axis=0)
+        rho = x[col].corr(aportes[col], method="spearman") if min(x[col].nunique(), aportes[col].nunique()) > 1 else np.nan
         yield dict(version=version, variable=col, signo_esperado=signo,
-                   spearman_shap=x[col].corr(aportes[col], method="spearman"),
+                   spearman_shap=rho, media_abs_shap=aportes[col].abs().mean(),
                    valor_caso=x.loc[caso, col].item(), shap_caso=aportes.loc[caso, col].item(),
                    comparaciones=delta.size, inversiones=int((delta < -1e-12).sum()))
 

@@ -6,7 +6,7 @@ import shap
 
 from src import config
 from src.models.busqueda import CLAVES, Climatologia
-from src.models.evaluacion import clasificar
+from src.models.evaluacion import ajustar_platt, clasificar
 from src.models.explicacion import etiqueta
 from src.models.objetivo import cargar, predictores
 
@@ -23,13 +23,37 @@ class Servicio:
                          .modalidad.agg(lambda s: sorted(s.unique())).rename(columns={"modalidad": "modalidades"}))
         self.nombre = "boosting_monotono"
         self.inicio_prueba = min(config.ANIOS_MODELO["prueba"])
-        self.referencia = joblib.load(config.ARTEFACTOS / "referencia_preprueba.joblib")
+        self.climas_siembra = self.cargar_climatologias()
         self.calibrado = joblib.load(config.ARTEFACTOS / f"completa_{self.nombre}_platt.joblib")
         # El estimador congelado es el mismo árbol que produjo las probabilidades.
         self.modelo = self.calibrado.estimator.estimator
         self.preparar = self.modelo.named_steps["preparar"]
         self.explicador = shap.TreeExplainer(self.modelo.named_steps["modelo"])
         self.costos = pd.read_csv(config.REPORTES / "costos_semaforo.csv")
+
+    def cargar_climatologias(self):
+        """Preparar al iniciar los pronósticos de siembra con historia disponible en cada corte."""
+        fin_base = max(config.ANIOS_MODELO["entrenamiento"])
+        fin_platt = max(config.ANIOS_MODELO["validacion"])
+        operativo = joblib.load(config.ARTEFACTOS / "completa_climatologia_platt.joblib")
+        modelos = {self.inicio_prueba: (operativo, fin_base, fin_platt)}
+        # Cortes retrospectivos: al menos un año de ajuste y uno posterior para Platt.
+        anios = sorted(self.historia.anio.unique())
+        for anio in anios:
+            if anio >= self.inicio_prueba:
+                break
+            anteriores = [a for a in anios if a < anio]
+            if len(anteriores) < 2:
+                continue
+            n_cal = min(len(config.ANIOS_MODELO["validacion"]), len(anteriores) - 1)
+            base = self.historia.loc[self.historia.anio.isin(anteriores[:-n_cal])]
+            cal = self.historia.loc[self.historia.anio.isin(anteriores[-n_cal:])]
+            if min(base.perdida.nunique(), cal.perdida.nunique()) < 2:
+                continue
+            crudo = Climatologia().fit(base[CLAVES], base.perdida)
+            modelo = ajustar_platt(crudo, cal[CLAVES], cal.perdida)
+            modelos[anio] = (modelo, base.anio.max(), cal.anio.max())
+        return modelos
 
     def municipios(self, cvegeo=None):
         """Consultar el catálogo, incluidas las modalidades realmente presentes."""
@@ -74,18 +98,22 @@ class Servicio:
         if not (grupo & historico.anio.eq(solicitud.anio)).any():
             raise SinDatos("No hay datos para ese municipio, modalidad y año.")
         corte = min(solicitud.anio, self.inicio_prueba)
-        previos = historico.loc[historico.anio.lt(corte)]
-        local = previos.loc[previos.cvegeo.eq(clave) & previos.modalidad.eq(modalidad)]
-        if local.empty:
-            raise SinDatos("No hay años anteriores para estimar la frecuencia municipal.")
-        referencia = self.referencia if corte == self.inicio_prueba else Climatologia().fit(previos[CLAVES], previos.perdida)
-        p = float(referencia.predict_proba(local[CLAVES].iloc[:1])[0, 1])
+        if corte not in self.climas_siembra or not (grupo & historico.anio.lt(corte)).any():
+            raise SinDatos("Falta historia anterior para estimar y calibrar el riesgo de siembra.")
+        modelo, fin_base, fin_cal = self.climas_siembra[corte]
+        local = historico.loc[grupo & historico.anio.le(fin_base)]
+        consulta = historico.loc[grupo & historico.anio.eq(solicitud.anio), CLAVES]
+        p = float(modelo.predict_proba(consulta)[0, 1])
         nivel = str(clasificar(np.array([p]), self.costos)[0])
         pron = dict(fuente="climatologia", probabilidad=round(p, 4), nivel=nivel, p10=None, p90=None,
                     escenarios=0, anios_analogos=[])
-        texto = (f"Al cierre de {corte-1}, hubo pérdida en {int(local.perdida.sum())} de {len(local)} "
-                 f"ciclos municipales de {modalidad.lower()}. La tasa se suaviza con {config.PESO_PREVIA:g} "
-                 f"ciclos equivalentes a la frecuencia de esa modalidad. Riesgo histórico: {p:.1%}.")
+        if local.empty:
+            base = f"La referencia de siembra emplea la frecuencia histórica de {modalidad.lower()}."
+        else:
+            base = (f"Hasta {fin_base}, hubo pérdida en {int(local.perdida.sum())} de {len(local)} ciclos "
+                    f"municipales de {modalidad.lower()}. La tasa se suavizó con la historia de esa modalidad.")
+        texto = (f"{base} Se calibró con Platt en {fin_base + 1}–{fin_cal}. "
+                 f"El riesgo calibrado en siembra es {p:.1%} y el aviso es {nivel}.")
         return pron, texto
 
     def prediccion(self, solicitud):
@@ -97,7 +125,7 @@ class Servicio:
         """Promediar atribuciones crudas sobre exactamente los mismos escenarios que la predicción."""
         if solicitud.ultima_etapa.value == "siembra":
             pron, texto = self.referencia_siembra(solicitud)
-            return dict(prediccion=pron, escala="frecuencia histórica suavizada", base=pron["probabilidad"],
+            return dict(prediccion=pron, escala="probabilidad climatológica calibrada con Platt", base=pron["probabilidad"],
                         salida_media=pron["probabilidad"], factores=[], texto=texto)
         matriz, anios = self.escenarios(solicitud)
         pronostico = self.resumir(matriz, anios)
@@ -112,13 +140,18 @@ class Servicio:
             aportes = aportes.drop(indicadores)
             aportes[var] = aporte
         factores = []
+        senales = []
         for var in aportes.abs().nlargest(config.N_TEXTO).index:
             valor = float(aportes[var])
             factores.append(dict(variable=etiqueta(var),
                                  direccion="eleva" if valor > 0 else "reduce" if valor < 0 else "neutra",
                                  aporte=valor))
-        senales = ", ".join(f["variable"]+" ("+f["direccion"]+")" for f in factores)
+            observado = (str(matriz[var].iloc[0]) if var in config.CATEGORICAS_MODELO
+                         else f"{matriz[var].mean():.1f}")
+            senales.append(f"{etiqueta(var)} = {observado} ({factores[-1]['direccion']})")
         texto = (f"El riesgo estimado es {pronostico['probabilidad']:.1%} y el aviso es {pronostico['nivel']}. "
-                 f"Las señales que más pesaron en el modelo fueron {senales}.")
+                 f"Los mayores aportes respecto de la base del modelo fueron {', '.join(senales)}.")
+        if anios:
+            texto += " Los valores y aportes resumen los escenarios históricos."
         return dict(prediccion=pronostico, escala=escala, base=float(base),
                     salida_media=float(base+aportes.sum()), factores=factores, texto=texto)

@@ -72,6 +72,14 @@ def evaluar_corte(tabla, horizonte, nombre, corte, grupo):
     return fila
 
 
+def ajustar_platt(modelo, x_validacion, y_validacion):
+    """Calibrar el estimador congelado sobre un bloque temporal posterior al ajuste."""
+    bloque = np.arange(len(x_validacion))
+    calibrado = CalibratedClassifierCV(FrozenEstimator(modelo), method="sigmoid",
+                                       cv=[(bloque, bloque)], ensemble=False)
+    return calibrado.fit(x_validacion, y_validacion)
+
+
 def calibrar_evaluar(partes, modelos, ganador, horizonte, referencia):
     """Congelar ajustes; usar validación para Platt y prueba exclusivamente para verificación."""
     validacion, prueba = partes["validacion"], partes["prueba"]
@@ -79,12 +87,7 @@ def calibrar_evaluar(partes, modelos, ganador, horizonte, referencia):
     for nombre, modelo in modelos.items():
         xv = entradas(validacion, nombre, horizonte)
         xp = entradas(prueba, nombre, horizonte)
-        # FrozenEstimator.fit es inerte. El único bloque produce una puntuación por
-        # fila de validación sin introducir particiones aleatorias ni reajustar el árbol.
-        bloque = np.arange(len(xv))
-        calibrado = CalibratedClassifierCV(FrozenEstimator(modelo), method="sigmoid",
-                                           cv=[(bloque, bloque)], ensemble=False)
-        calibrado.fit(xv, validacion.perdida)
+        calibrado = ajustar_platt(modelo, xv, validacion.perdida)
         joblib.dump(calibrado, config.ARTEFACTOS / f"{horizonte}_{nombre}_platt.joblib")
         control.append(dict(horizonte=horizonte, modelo=nombre, filas=len(xv),
                             perdidas=validacion.perdida.sum(), observada=validacion.perdida.mean(),

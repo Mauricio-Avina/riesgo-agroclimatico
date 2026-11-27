@@ -17,7 +17,7 @@ async def lifespan(app):
 
 
 app = FastAPI(title="Riesgo de pérdida de maíz", version="1.0", lifespan=lifespan,
-              description="Piloto municipal de Guanajuato y Querétaro. En siembra se informa la frecuencia histórica. Desde vegetativo se emplea el modelo restringido con años análogos.")
+              description="Piloto municipal de Guanajuato y Querétaro. En siembra se informa la climatología calibrada con Platt. Desde vegetativo se emplea el modelo restringido con años análogos.")
 errores = {404: {"model": ErrorAPI, "description": "Sin cobertura o historial"},
            422: {"model": ErrorAPI, "description": "Datos de entrada inválidos"}}
 router = APIRouter(prefix=config.PREFIJO_API)

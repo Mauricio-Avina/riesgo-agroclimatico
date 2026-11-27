@@ -80,22 +80,48 @@ class PruebaAPI(unittest.TestCase):
 
     def test_siembra_es_historia_disponible(self):
         from src.models.busqueda import CLAVES, Climatologia
+        from src.models.evaluacion import ajustar_platt, clasificar
+        ejemplo = self.ejemplo
+        historico = self.datos
+        consulta = historico.loc[historico.cvegeo.eq(ejemplo["cvegeo"])
+                                 & historico.modalidad.eq(ejemplo["modalidad"]), CLAVES].iloc[:1]
         for anio in [2012, 2021, 2025]:
+            if anio >= min(config.ANIOS_MODELO["prueba"]):
+                modelo = joblib.load(config.ARTEFACTOS / "completa_climatologia_platt.joblib")
+            else:
+                cal = historico.loc[historico.anio.between(anio-3, anio-1)]
+                base = historico.loc[historico.anio.lt(anio-3)]
+                modelo = ajustar_platt(Climatologia().fit(base[CLAVES], base.perdida), cal[CLAVES], cal.perdida)
+            esperado = modelo.predict_proba(consulta)[:, 1]
             pron = self.post(ultima_etapa="siembra", anio=anio).json()
-            antes = self.datos.loc[self.datos.anio.lt(min(anio, min(config.ANIOS_MODELO["prueba"])))]
-            consulta = antes.loc[antes.cvegeo.eq(self.ejemplo["cvegeo"]) & antes.modalidad.eq(self.ejemplo["modalidad"]), CLAVES].iloc[:1]
-            ref = Climatologia().fit(antes[CLAVES], antes.perdida).predict_proba(consulta)[0, 1]
-            self.assertEqual(pron["probabilidad"], round(float(ref), 4))
-            self.assertEqual((pron["fuente"], pron["escenarios"], pron["p10"], pron["p90"]), ("climatologia", 0, None, None))
+            self.assertEqual(pron["probabilidad"], round(float(esperado[0]), 4))
+            self.assertEqual(pron["nivel"], clasificar(esperado, app.state.servicio.costos)[0])
+            self.assertEqual((pron["fuente"], pron["escenarios"], pron["p10"], pron["p90"]),
+                             ("climatologia", 0, None, None))
             exp = self.post("explicacion", ultima_etapa="siembra", anio=anio).json()
             self.assertEqual(exp["prediccion"], pron)
             self.assertEqual(exp["factores"], [])
-        self.assertEqual(self.post(ultima_etapa="siembra", anio=config.ANIO_INICIAL).status_code, 404)
+            self.assertIn("Platt", exp["texto"])
+        for anio in [config.ANIO_INICIAL, config.ANIO_INICIAL + 1]:
+            self.assertEqual(self.post(ultima_etapa="siembra", anio=anio).status_code, 404)
 
     def test_direcciones_rf07(self):
         modelo = app.state.servicio.calibrado
         x = predictores(self.datos.tail(100), "completa")
-        for nombre, signo in config.DIRECCIONES_RF07.items():
+        direcciones = dict.fromkeys((f"lluvia_{e}_mm" for e in config.ETAPAS), -1)
+        direcciones.update(dict.fromkeys((f"racha_seca_{e}_dias" for e in config.ETAPAS), 1))
+        direcciones.update(calor_floracion_dias=1, helada_llenado_dias=1)
+        self.assertEqual(direcciones, app.state.servicio.modelo.named_steps["modelo"].monotonic_cst)
+        for nombre, signo in direcciones.items():
             minimo, maximo = self.datos[nombre].min(), self.datos[nombre].max()
             p = [modelo.predict_proba(x.assign(**{nombre: v}))[:, 1] for v in np.linspace(minimo, maximo, 8)]
             self.assertTrue((signo * np.diff(p, axis=0) >= -1e-12).all())
+
+    def test_siete_dias_secos_en_el_caso_del_anexo(self):
+        servicio = app.state.servicio
+        x, _ = servicio.escenarios(Solicitud(**self.ejemplo))
+        self.assertEqual(x.racha_seca_siembra_dias.item(), 7)
+        exp = servicio.explicador(servicio.preparar.transform(x))
+        indice = list(servicio.preparar.get_feature_names_out()).index("racha_seca_siembra_dias")
+        self.assertGreaterEqual(exp.values[0, indice], 0.0)
+        self.assertNotIn("Racha seca en siembra (días) = 7.0 (reduce)", self.post("explicacion").json()["texto"])
