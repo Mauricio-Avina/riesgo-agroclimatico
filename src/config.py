@@ -66,3 +66,29 @@ ESPACIOS_BUSQUEDA = {
     "red": {"alpha": [0.0001, 0.001, 0.01, 0.1], "learning_rate_init": [0.001, 0.003, 0.01],
             "hidden_layer_sizes": [(12,), (24,), (16, 8), (32, 12)]},
 }
+
+METRICAS = ("brier", "bss", "pr_auc", "roc_auc")
+CUANTILES_IC = (0.025, 0.975)
+GRUPOS_CONFIABILIDAD = 5
+DPI_MODELOS = 180
+MIN_EVENTOS_EQUIDAD = 20
+BRECHA_SENSIBILIDAD = 0.10
+ANIO_COSTO_AUXILIO = 2024
+COSTO_AUXILIO = 600  # MXN/ha, INIFAP, 29-04-2024, Sinaloa.
+FUENTE_COSTO = "https://www.gob.mx/inifap/articulos/recomendaciones-para-el-manejo-del-riego-normal-y-deficitario-de-maiz"
+# Sifuentes Ibarra et al., Tecnologías de riego bajo condiciones de escasez de agua en maíz,
+# cuadro 5, p. 15. Rendimientos experimentales por calendario, no eficacia municipal.
+FUENTE_RESPUESTA = "https://www.fps.org.mx/portal/index.php/component/phocadownload/category/30-granos-y-flores?download=66:tecnologias-de-riego-bajo-condiciones-de-escasez-de-agua-en-maiz"
+BASE_AUXILIOS = 2
+T_HA_AUXILIO = {2: 6.79, 3: 9.73, 5: 10.62}
+ACCIONES_RIEGO = {"amarillo": (2, 3), "rojo": (3, 5)}
+
+GRUPOS_EQUIDAD = ("modalidad", "estado", "grado_marginacion_2020")
+TOLERANCIA_SHAP = 1e-5
+N_GLOBAL, N_LOCAL, N_TEXTO = 10, 7, 3
+ANIO_CASO = 2023
+NOMBRES_VARIABLES = {"lluvia_": "Lluvia", "racha_seca_": "Racha seca", "gdd_": "Grados día",
+                     "radiacion_": "Radiación", "calor_": "Días de calor", "helada_": "Días de helada",
+                     "sembrada_ha": "Superficie sembrada (ha)", "marginacion_2020": "Índice de marginación",
+                     "modalidad_": "Modalidad", "estado_": "Estado", "latitud": "Latitud",
+                     "longitud": "Longitud", "area_km2": "Área municipal (km²)", "altitud_celda_m": "Altitud (m)"}

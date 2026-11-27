@@ -35,6 +35,10 @@ class Climatologia(ClassifierMixin, BaseEstimator):
         self.classes_ = np.unique(y)
         return self
 
+    def predict(self, X):
+        """Devolver la clase de mayor probabilidad según la interfaz sklearn."""
+        return self.classes_[self.predict_proba(X).argmax(axis=1)]
+
     def predict_proba(self, X):
         p = self.tasas_.reindex(pd.MultiIndex.from_frame(X[CLAVES])).to_numpy()
         respaldo = X.modalidad.map(self.modalidad_).fillna(self.global_)
