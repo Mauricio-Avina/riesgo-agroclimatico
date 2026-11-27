@@ -49,3 +49,20 @@ EXCLUIDAS_MODELO = ("cosechada_ha", "siniestrada_ha", "produccion_t", "rendimien
                     "precio_pesos_t_de_2025", "valor_produccion_pesos_de_2025", "cvegeo",
                     "municipio", "anio", "fecha_siembra_escenario", "inpc",
                     "factor_pesos_constantes", "grado_marginacion_2020")
+
+PESO_PREVIA = 2
+COMBINACIONES = 20
+ARBOLES = 90
+ITER_LOGISTICA = 800
+ITER_RED = 250
+PROCESOS = 3
+ORDEN_DESEMPATE = ("climatologia", "logistica", "bosque", "boosting", "red")
+ESPACIOS_BUSQUEDA = {
+    "logistica": {"C": [10 ** (i / 4) for i in range(-12, 12)]},
+    "bosque": {"max_depth": [3, 5, 8, None], "min_samples_leaf": [2, 5, 10, 20],
+               "max_features": ["sqrt", 0.5, 0.8]},
+    "boosting": {"learning_rate": [0.025, 0.05, 0.1], "max_leaf_nodes": [5, 9, 15, 25],
+                 "min_samples_leaf": [10, 20, 40], "l2_regularization": [0.1, 1, 5]},
+    "red": {"alpha": [0.0001, 0.001, 0.01, 0.1], "learning_rate_init": [0.001, 0.003, 0.01],
+            "hidden_layer_sizes": [(12,), (24,), (16, 8), (32, 12)]},
+}
