@@ -16,3 +16,7 @@ Costo: qué me constó
 ## A-003 · 27/11/2026 · Clasificación municipal (paso 3.1)
 
 El apartado 2.5 enlaza las cuatro familias de clasificación con la comparación de cinco alternativas, incluida la climatología. Mantener los municipios de cada año en el mismo bloque reproduce el uso previsto del aviso. La precisión promedio permite interpretar el orden de los avisos en relación con la prevalencia del bloque. La ficha de Saito y Rehmsmeier acompaña ahora a las métricas de clasificación.
+
+## A-004 · 27/11/2026 · Calibración y costo del aviso (paso 3.2)
+
+El apartado 2.6 desarrolla el Brier binario, la habilidad respecto de la climatología y el umbral económico C/L. Comparar la calibración requiere conservar ambos pronósticos para las mismas filas. Los costos y rendimientos del escenario de Sinaloa quedan identificados en las fichas de 2.6, junto al antecedente del uso de trayectorias meteorológicas.
