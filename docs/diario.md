@@ -20,3 +20,7 @@ El apartado 2.5 enlaza las cuatro familias de clasificación con la comparación
 ## A-004 · 27/11/2026 · Calibración y costo del aviso (paso 3.2)
 
 El apartado 2.6 desarrolla el Brier binario, la habilidad respecto de la climatología y el umbral económico C/L. Comparar la calibración requiere conservar ambos pronósticos para las mismas filas. Los costos y rendimientos del escenario de Sinaloa quedan identificados en las fichas de 2.6, junto al antecedente del uso de trayectorias meteorológicas.
+
+## A-005 · 27/11/2026 · Explicación y errores por grupo (paso 3.3)
+
+El apartado 2.7 distingue la escala del árbol explicada por SHAP de la probabilidad calibrada que recibe el productor. Para leer la igualdad de oportunidades se presentan las pérdidas de cada grupo junto con la sensibilidad. Esto permite detectar tanto evidencia escasa como un umbral que deja a todos los grupos sin aciertos.
