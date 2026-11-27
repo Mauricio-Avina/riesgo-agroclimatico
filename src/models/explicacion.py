@@ -48,7 +48,9 @@ def barras(nombres, valores, titulo, eje, ruta):
     ax.barh([etiqueta(x) for x in nombres], valores,
             color=np.where(np.asarray(valores) >= 0, "#276680", "#b65736"))
     ax.axvline(0, color="#303030", linewidth=0.7)
-    ax.set(title=titulo, xlabel=eje)
+    ax.set(xlabel=eje)
+    if titulo:
+        ax.set_title(titulo)
     fig.savefig(ruta, dpi=config.DPI_MODELOS); plt.close(fig)
 
 
@@ -75,7 +77,7 @@ def explicar(t, modelo, nombre, horizonte, sufijo):
     fig = config.FIGURAS
     prefijo = "fig_3_5_2_shap_"
     top = ranking.head(config.N_GLOBAL).sort_values()
-    barras(top.index, top.values, "¿Qué variables pesan más en la prueba?",
+    barras(top.index, top.values, "",
            "Media de la contribución absoluta · " + escala, fig / f"{prefijo}global{sufijo}.png")
     caso = t.loc[t.anio.eq(config.ANIO_CASO) & t.modalidad.eq("Temporal") & t.perdida.eq(1)]
     if caso.empty:

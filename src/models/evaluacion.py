@@ -39,19 +39,19 @@ def puntuaciones(y, p, ref):
                      roc_auc_score(y, p) if dos_clases else np.nan])
 
 
-def intervalos(y, p, ref, anios):
+def intervalos(y, p, ref, anios, cruda):
     """Bootstrap exacto de cinco años: comprimir remuestras con igual multiplicidad."""
     bloques = [np.flatnonzero(anios == a) for a in np.unique(anios)]
     n = len(bloques)
     # Una sola temporada no admite estimar incertidumbre entre años.
     if n < 2:
-        return np.full((2, len(config.METRICAS)), np.nan), np.zeros(len(config.METRICAS), dtype=int)
+        return np.full((2, len(config.METRICAS) + 1), np.nan), np.zeros(len(config.METRICAS) + 1, dtype=int)
     patrones, frecuencia = np.unique(np.sort(list(product(range(n), repeat=n)), axis=1),
                                      axis=0, return_counts=True)
     replicas = []
     for patron in patrones:
         idx = np.concatenate([bloques[j] for j in patron])
-        replicas.append(puntuaciones(y[idx], p[idx], ref[idx]))
+        replicas.append([*puntuaciones(y[idx], p[idx], ref[idx]), np.mean((y[idx]-cruda[idx])**2)])
     muestra = np.repeat(replicas, frecuencia, axis=0)
     return np.nanquantile(muestra, config.CUANTILES_IC, axis=0), np.isfinite(muestra).sum(axis=0)
 
@@ -60,11 +60,12 @@ def evaluar_corte(tabla, horizonte, nombre, corte, grupo):
     """Reportar denominadores y réplicas válidas junto a cada estimación."""
     y, p, ref = (tabla[c].to_numpy() for c in ("perdida", "p", "referencia"))
     valores = puntuaciones(y, p, ref)
-    limites, validas = intervalos(y, p, ref, tabla.anio.to_numpy())
+    limites, validas = intervalos(y, p, ref, tabla.anio.to_numpy(), tabla.cruda.to_numpy())
     fila = dict(horizonte=horizonte, modelo=nombre, corte=corte, grupo=grupo, filas=len(y),
                 perdidas=y.sum(), prevalencia=y.mean(), prob_media=p.mean(),
                 brier_sin_calibrar=np.mean((y-tabla.cruda.to_numpy())**2),
-                brier_referencia=np.mean((y-ref)**2))
+                brier_referencia=np.mean((y-ref)**2), brier_sin_calibrar_ic_inf=limites[0,-1],
+                brier_sin_calibrar_ic_sup=limites[1,-1])
     for i, metrica in enumerate(config.METRICAS):
         fila.update({metrica: valores[i], metrica+"_ic_inf": limites[0,i],
                      metrica+"_ic_sup": limites[1,i], metrica+"_replicas": validas[i]})
@@ -93,6 +94,7 @@ def calibrar_evaluar(partes, modelos, ganador, horizonte, referencia):
         if nombre == ganador:
             final = tabla
         cortes = [("total", "Todos", tabla)]
+        cortes.append(("sensibilidad", "Sin 2023", tabla.loc[tabla.anio.ne(config.ANIO_CASO)]))
         for columna in ("modalidad", "anio"):
             cortes.extend((columna, grupo, t) for grupo, t in tabla.groupby(columna))
         filas.extend(evaluar_corte(t, horizonte, nombre, corte, grupo) for corte, grupo, t in cortes)
@@ -144,5 +146,5 @@ def confiabilidad(t, horizonte, nombre, ruta):
         obs, estim = calibration_curve(t.perdida, t[col], n_bins=config.GRUPOS_CONFIABILIDAD, strategy="quantile")
         ax.plot(estim, obs, "o-", label=etiqueta)
     ax.set(xlabel="Probabilidad media pronosticada", ylabel="Proporción de pérdidas observada",
-           xlim=(0,1), ylim=(0,1), title=f"Confiabilidad de {nombre} · {horizonte.replace('prefloracion', 'prefloración')}")
+           xlim=(0,1), ylim=(0,1))
     ax.legend(); fig.savefig(ruta, dpi=config.DPI_MODELOS); plt.close(fig)

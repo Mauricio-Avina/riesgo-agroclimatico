@@ -24,3 +24,7 @@ El apartado 2.6 desarrolla el Brier binario, la habilidad respecto de la climato
 ## A-005 · 27/11/2026 · Explicación y errores por grupo (paso 3.3)
 
 El apartado 2.7 distingue la escala del árbol explicada por SHAP de la probabilidad calibrada que recibe el productor. Para leer la igualdad de oportunidades se presentan las pérdidas de cada grupo junto con la sensibilidad. Esto permite detectar tanto evidencia escasa como un umbral que deja a todos los grupos sin aciertos.
+
+## A-006 · 27/11/2026 · Resultados del Problema 2 (paso 3.8)
+
+La Tabla 10 del apartado 3.5.2 contrasta los cinco modelos en las mismas 605 filas. Se calcularon intervalos por año completo para el Brier crudo y calibrado, el BSS, la precisión promedio y el ROC-AUC. Al retirar 2023, la AP del boosting bajó de 0.315 a 0.103 y el BSS subió de 0.146 a 0.331. El Anexo E reúne el espacio de búsqueda, la variación de la AP y las pérdidas de cada pliegue. Las Figuras 5 y 6 muestran confiabilidad y atribución global a 300 dpi.

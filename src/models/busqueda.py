@@ -105,6 +105,9 @@ def entrenar(datos, horizonte):
             bloque = datos.iloc[despues]
             filas.append(dict(horizonte=horizonte, modelo=nombre, inicio=bloque.anio.min(),
                               fin=bloque.anio.max(), n_entrenamiento=len(antes), filas=len(bloque),
+                              desde_entrena=datos.iloc[antes].anio.min(), hasta_entrena=datos.iloc[antes].anio.max(),
+                              perdidas_entrena=y.iloc[antes].sum(), combinaciones=0 if nombre=="climatologia" else config.COMBINACIONES,
+                              espacio=json.dumps(config.ESPACIOS_BUSQUEDA.get(nombre, {}), sort_keys=True),
                               perdidas=bloque.perdida.sum(), azar=bloque.perdida.mean(), ap=ap,
                               media_ap=np.mean(puntajes), de_ap=np.std(puntajes),
                               parametros=json.dumps(parametros, sort_keys=True)))
