@@ -31,10 +31,11 @@ class Municipio(BaseModel):
 
 
 class Prediccion(BaseModel):
+    fuente: Literal["climatologia", "boosting_monotono"]
     probabilidad: float
     nivel: Literal["verde", "amarillo", "rojo"]
-    p10: float
-    p90: float
+    p10: float | None
+    p90: float | None
     escenarios: int
     anios_analogos: list[int]
 

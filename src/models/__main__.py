@@ -9,6 +9,7 @@ from src.models.busqueda import entrenar
 from src.models.evaluacion import calibrar_evaluar, clasificar, confiabilidad, referencia_actualizada, semaforo, umbrales
 from src.models.explicacion import equidad, explicar
 from src.models.objetivo import cargar, grupos
+from src.models.revision import main as revisar_rf07
 
 log = logging.getLogger(__name__)
 
@@ -39,12 +40,14 @@ def main():
         confiabilidad(t, h, ganador, config.FIGURAS / f"fig_3_5_2_confiabilidad{sufijo}.png")
         ranking, caso = explicar(t, modelos[ganador], ganador, h, sufijo)
         resultados = dict(busqueda_modelos=busqueda, metricas_modelos=metricas, calibracion=calibracion,
-                          semaforo=semaforo(t,costos,h), equidad=equidad(t,rojo,h), importancia_shap=ranking,
+                          semaforo=semaforo(t,costos,h), equidad_rojo=equidad(t,rojo,h), importancia_shap=ranking,
                           caso_shap=pd.DataFrame([caso]), pronosticos_prueba=pronosticos)
         for nombre, tabla in resultados.items():
             salidas.setdefault(nombre, []).append(tabla)
     for nombre, tablas in salidas.items():
         pd.concat(tablas, ignore_index=True).to_csv(config.REPORTES / f"{nombre}.csv", index=False)
+
+    revisar_rf07()
 
 
 if __name__ == "__main__":

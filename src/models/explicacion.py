@@ -25,15 +25,15 @@ def etiqueta(variable):
     return variable.replace("_", " ").capitalize()
 
 
-def equidad(t, rojo, horizonte):
+def equidad(t, umbral, horizonte, nivel="rojo"):
     """Auditar la oportunidad de aviso entre quienes experimentaron pérdida."""
     filas = []
     for dimension in config.GRUPOS_EQUIDAD:
         for grupo, sub in t.groupby(dimension, dropna=False):
-            conteos = avisos(sub, rojo)
+            conteos = avisos(sub, umbral)
             filas.append(dict(horizonte=horizonte, dimension=dimension, grupo=grupo,
                               proporcion_observada=sub.perdida.mean(), prob_media=sub.p.mean(),
-                              brier=((sub.perdida-sub.p)**2).mean(), umbral_rojo=rojo, **conteos,
+                              brier=((sub.perdida-sub.p)**2).mean(), **{"umbral_" + nivel: umbral}, **conteos,
                               interpretacion="no concluyente" if conteos["perdidas"] < config.MIN_EVENTOS_EQUIDAD
                               else "descriptiva"))
     tabla = pd.DataFrame(filas)

@@ -102,3 +102,6 @@ PREFIJO_API = "/v1"
 CUANTILES_ANALOGOS = (0.10, 0.90)
 EJEMPLO_API = {"cvegeo": "11032", "modalidad": "Temporal", "anio": 2023,
                "ultima_etapa": "llenado"}
+
+# Dirección parcial del riesgo bajo déficit hídrico (D-027).
+DIRECCIONES_RF07 = {"lluvia_siembra_mm": -1, "lluvia_floracion_mm": -1, "racha_seca_floracion_dias": 1}

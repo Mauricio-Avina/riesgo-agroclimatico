@@ -1,0 +1,7 @@
+version,variable,signo_esperado,spearman_shap,valor_caso,shap_caso,comparaciones,inversiones
+original,lluvia_siembra_mm,-1,0.02490785419134898,0.0,-1.720767368289174,5445,1278
+original,lluvia_floracion_mm,-1,0.7138377689170451,62.27,-0.10005649853388414,6050,1917
+original,racha_seca_floracion_dias,1,-0.6911812207628419,3.0,-0.02087994974241936,3630,581
+restringido,lluvia_siembra_mm,-1,-0.9418001146066602,0.0,0.2172296812044206,5445,0
+restringido,lluvia_floracion_mm,-1,-0.8390181359806531,62.27,0.06090406621742438,6050,0
+restringido,racha_seca_floracion_dias,1,0.4822300068239322,3.0,-0.085292330662302,3630,0

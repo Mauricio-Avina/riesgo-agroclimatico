@@ -49,14 +49,14 @@ class PruebaAPI(unittest.TestCase):
         nombre = self.cliente.get("/v1/salud").json()["modelo"]
         modelo = joblib.load(config.ARTEFACTOS / f"completa_{nombre}_platt.joblib")
         esperado = modelo.predict_proba(predictores(fila,"completa"))[0,1]
-        self.assertEqual(pron["probabilidad"], esperado)
+        self.assertEqual(pron["probabilidad"], round(float(esperado), 4))
         self.assertEqual(pron["p10"], pron["p90"])
         self.assertEqual(pron["escenarios"], 1)
 
     def test_analogos_y_explicacion(self):
-        peticion = self.ejemplo | {"ultima_etapa":"siembra"}
-        a = self.post(ultima_etapa="siembra").json()
-        self.assertEqual(a, self.post(ultima_etapa="siembra").json())
+        peticion = self.ejemplo | {"ultima_etapa":"vegetativo"}
+        a = self.post(ultima_etapa="vegetativo").json()
+        self.assertEqual(a, self.post(ultima_etapa="vegetativo").json())
         self.assertTrue(all(y < peticion["anio"] for y in a["anios_analogos"]))
         s = app.state.servicio
         x, anios = s.escenarios(Solicitud(**peticion))
@@ -69,10 +69,33 @@ class PruebaAPI(unittest.TestCase):
                   & historia.anio.eq(peticion["anio"]))
         historia.loc[piloto, "lluvia_llenado_mm"] = np.nan
         with patch.object(s, "historia", historia):
-            self.assertEqual(a, self.post(ultima_etapa="siembra").json())
+            self.assertEqual(a, self.post(ultima_etapa="vegetativo").json())
         probs = s.calibrado.predict_proba(x)[:,1]
-        np.testing.assert_allclose([a["probabilidad"],a["p10"],a["p90"]],[probs.mean(),*np.quantile(probs,config.CUANTILES_ANALOGOS)])
-        b = self.post("explicacion", ultima_etapa="siembra").json()
+        np.testing.assert_array_equal([a["probabilidad"], a["p10"], a["p90"]],
+                                      np.round([probs.mean(), *np.quantile(probs,config.CUANTILES_ANALOGOS)], 4))
+        b = self.post("explicacion", ultima_etapa="vegetativo").json()
         self.assertEqual(a,b["prediccion"])
         self.assertEqual(len(b["factores"]),config.N_TEXTO)
-        self.assertEqual(self.post(anio=config.ANIO_INICIAL,ultima_etapa="siembra").status_code,404)
+        self.assertEqual(self.post(anio=config.ANIO_INICIAL,ultima_etapa="vegetativo").status_code,404)
+
+    def test_siembra_es_historia_disponible(self):
+        from src.models.busqueda import CLAVES, Climatologia
+        for anio in [2012, 2021, 2025]:
+            pron = self.post(ultima_etapa="siembra", anio=anio).json()
+            antes = self.datos.loc[self.datos.anio.lt(min(anio, min(config.ANIOS_MODELO["prueba"])))]
+            consulta = antes.loc[antes.cvegeo.eq(self.ejemplo["cvegeo"]) & antes.modalidad.eq(self.ejemplo["modalidad"]), CLAVES].iloc[:1]
+            ref = Climatologia().fit(antes[CLAVES], antes.perdida).predict_proba(consulta)[0, 1]
+            self.assertEqual(pron["probabilidad"], round(float(ref), 4))
+            self.assertEqual((pron["fuente"], pron["escenarios"], pron["p10"], pron["p90"]), ("climatologia", 0, None, None))
+            exp = self.post("explicacion", ultima_etapa="siembra", anio=anio).json()
+            self.assertEqual(exp["prediccion"], pron)
+            self.assertEqual(exp["factores"], [])
+        self.assertEqual(self.post(ultima_etapa="siembra", anio=config.ANIO_INICIAL).status_code, 404)
+
+    def test_direcciones_rf07(self):
+        modelo = app.state.servicio.calibrado
+        x = predictores(self.datos.tail(100), "completa")
+        for nombre, signo in config.DIRECCIONES_RF07.items():
+            minimo, maximo = self.datos[nombre].min(), self.datos[nombre].max()
+            p = [modelo.predict_proba(x.assign(**{nombre: v}))[:, 1] for v in np.linspace(minimo, maximo, 8)]
+            self.assertTrue((signo * np.diff(p, axis=0) >= -1e-12).all())
