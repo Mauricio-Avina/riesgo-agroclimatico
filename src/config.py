@@ -110,3 +110,29 @@ DIRECCIONES_RF07 = {
     "calor_floracion_dias": 1,
     "helada_llenado_dias": 1,
 }
+
+# Operación local y simulación del piloto (D-028 a D-031).
+CICLO_DEMO = 2025
+FICHA_LOCAL = ARTEFACTOS / "fichas_2025.json"
+BOLETINES = ARTEFACTOS / "boletines"
+FUENTES_TIPOGRAFICAS = RAIZ / "assets" / "fonts"
+API_LOCAL = "http://127.0.0.1:8000/v1"
+ESTADOS_NOMBRE = {"11": "Guanajuato", "22": "Querétaro"}
+NIVELES = {"verde": ("●", "Bajo", "#205743"), "amarillo": ("▲", "Medio", "#785000"),
+           "rojo": ("◆", "Alto", "#932e32")}
+AVISO = "Es una estimación, no una certeza."
+AVISO_SIMULACION = "Muestra cómo cambia la estimación, no garantiza el efecto de la decisión."
+CLIMAS_SIM = {"Seco": 0.20, "Normal": 0.50, "Húmedo": 0.80}
+FECHAS_SIM = ("06-01", "07-15")
+FUENTE_TEMPORAL = "Agenda técnica agrícola de Querétaro, cultivo de maíz, pp. 18 y 23 (INIFAP)."
+RECOMENDACIONES = {
+    "Temporal": {"verde": "Mantén el recorrido habitual y registra las lluvias de la parcela.",
+                 "amarillo": "Revisa la humedad del suelo y comenta con el técnico dónde empieza a faltar agua.",
+                 "rojo": "Prioriza con el técnico las parcelas con marchitez y documenta la superficie afectada."},
+    "Riego": {"verde": "Mantén el seguimiento de la humedad y del calendario de riego.",
+              "amarillo": "Comprueba la humedad y la disponibilidad de agua con el técnico antes de ajustar el riego.",
+              "rojo": "Revisa hoy con el técnico la necesidad y la viabilidad de un riego de auxilio."},
+}
+CAMPOS_PUBLICOS = {"cvegeo": "clave INEGI", "municipio": "nombre", "anio": "año agrícola",
+                   "modalidad": "régimen hídrico", "sembrada_ha": "ha", "siniestrada_ha": "ha",
+                   "rendimiento_t_ha": "t/ha", "siniestralidad": "proporción"}

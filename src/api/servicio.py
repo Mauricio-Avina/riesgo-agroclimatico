@@ -18,6 +18,7 @@ class SinDatos(LookupError):
 class Servicio:
     def __init__(self):
         datos = cargar()
+        self.datos = datos
         self.historia = datos[["cvegeo", "municipio", "anio", "perdida", *config.FIJAS_MODELO, *config.CLIMA_MODELO]]
         self.catalogo = (datos.groupby(["cvegeo", "municipio"], as_index=False)
                          .modalidad.agg(lambda s: sorted(s.unique())).rename(columns={"modalidad": "modalidades"}))
@@ -121,7 +122,7 @@ class Servicio:
             return self.referencia_siembra(solicitud)[0]
         return self.resumir(*self.escenarios(solicitud))
 
-    def explicacion(self, solicitud):
+    def explicacion(self, solicitud, vista="resumen"):
         """Promediar atribuciones crudas sobre exactamente los mismos escenarios que la predicción."""
         if solicitud.ultima_etapa.value == "siembra":
             pron, texto = self.referencia_siembra(solicitud)
@@ -141,7 +142,9 @@ class Servicio:
             aportes[var] = aporte
         factores = []
         senales = []
-        for var in aportes.abs().nlargest(config.N_TEXTO).index:
+        elegibles = aportes.reindex([*config.DIRECCIONES_RF07, "modalidad"]) if vista == "productor" else aportes
+        cantidad = len(elegibles) if vista == "tecnica" else config.N_TEXTO
+        for var in elegibles.abs().nlargest(cantidad).index:
             valor = float(aportes[var])
             factores.append(dict(variable=etiqueta(var),
                                  direccion="eleva" if valor > 0 else "reduce" if valor < 0 else "neutra",

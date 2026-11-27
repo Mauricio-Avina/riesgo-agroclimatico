@@ -58,3 +58,17 @@ class Explicacion(BaseModel):
 
 class ErrorAPI(BaseModel):
     detalle: str
+
+class Palanca(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    modalidad: Modalidad
+    fecha: str = Field(pattern=r"^(06-(0[1-9]|[12][0-9]|30)|07-(0[1-9]|1[0-5]))$",
+                       description="Mes-día, del 1 de junio al 15 de julio del año análogo.")
+
+
+class Simulacion(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    cvegeo: Clave
+    actual: Palanca
+    alternativa_b: Palanca
+    alternativa_c: Palanca

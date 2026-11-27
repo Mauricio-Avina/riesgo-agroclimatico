@@ -1,0 +1,10 @@
+caso,clima,anio,modalidad,fecha,probabilidad,nivel,perdida_esperada_ha,variables_fuera_p01_p99
+A,Seco,2005,Temporal,06-15,0.7072,rojo,2570.37,0
+A,Normal,2006,Temporal,06-15,0.4551,amarillo,1654.31,0
+A,Húmedo,2004,Temporal,06-15,0.3284,amarillo,1193.69,0
+B,Seco,2005,Temporal,07-01,0.6911,rojo,2512.07,1
+B,Normal,2006,Temporal,07-01,0.5297,amarillo,1925.42,0
+B,Húmedo,2004,Temporal,07-01,0.2282,amarillo,829.45,0
+C,Seco,2005,Riego,06-15,0.0398,verde,423.83,0
+C,Normal,2006,Riego,06-15,0.0253,verde,270.13,0
+C,Húmedo,2004,Riego,06-15,0.0208,verde,221.61,0

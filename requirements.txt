@@ -119,3 +119,8 @@ threadpoolctl==3.8.0
 
 fastapi==0.165.0
 uvicorn==0.54.0
+
+streamlit==1.67.0
+fpdf2==2.9.0
+
+altair==6.3.0

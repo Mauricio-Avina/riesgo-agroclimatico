@@ -233,3 +233,45 @@ En el boosting, las cinco primeras columnas por media de |SHAP| fueron el indica
 **Consecuencias.** En temporada completa, AP/BSS fueron 0.315/0.146 sin restricciones, 0.342/0.189 con tres y 0.337/0.167 con diez. La versión en servicio obtuvo Brier 0.1445 antes de Platt y 0.1196 después, con media de riesgo de 8.3 % frente a 15.0 % observado. Los cinco quintiles subestimaron las pérdidas. En la Figura 5 se emplea la curva de este último modelo. El beneficio de imponer direcciones agronómicas se evalúa por coherencia y sigue pendiente contrastarlo en ciclos independientes. [Métricas vigentes](../reports/revision_modelos.csv) · [Versión con tres restricciones](https://github.com/Mauricio-Avina/riesgo-agroclimatico/blob/313761e7093f8a2741af915386227fead9f6d03e/reports/revision_modelos.csv) · [Quintiles](../reports/revision_quintiles.csv)
 
 **Seguimiento de RNF-03.** Al amarillo, Guanajuato detectó 33/38 pérdidas y Querétaro 31/53 (brecha de 28.4 puntos). Se priorizan las 22 omisiones de Querétaro y la comparación por año y modalidad. Riego detectó 2/11 y temporal 62/80 (59.3 puntos); se revisarán los nueve daños omitidos en riego y se ampliará su muestra. Frente a marginación muy baja (17/31), las brechas de media (16/20), baja (22/28) y alta (9/12) fueron 25.2, 23.7 y 20.2 puntos. Diez de las 14 omisiones en muy baja ocurrieron en 2021–2022. Se revisarán esos cierres y se reunirán más pérdidas de marginación alta. Estos contrastes describen composición y cobertura dentro del piloto. [Resultados por grupo](../reports/revision_equidad.csv)
+
+## D-028 · 27/11/2026 · Factores de la tarjeta del productor
+
+**Contexto y alternativas.** El mayor aporte local puede corresponder a radiación, ubicación u otra variable sin una dirección agronómica impuesta. Se consideró mostrar las tres mayores contribuciones de todo el árbol o limitar la tarjeta a las variables defendibles para RF-07.
+
+**Decisión y razón.** Desde vegetativo se eligen por valor absoluto tres aportes TreeSHAP entre las cuatro lluvias, las cuatro rachas secas, el calor en floración, la helada en llenado y la modalidad agrupada. Cada frase expresa la contribución respecto a la base del modelo. Las restricciones describen el cambio parcial al variar una sola variable. En siembra se explican el conteo municipal, el suavizado por modalidad y los años de calibración de Platt.
+
+**Consecuencias.** La vista técnica conserva los aportes de todas las variables del árbol y su escala. Cuando quedan etapas por observar, se promedian las contribuciones sobre los mismos años análogos que la predicción. Las tres frases de la tarjeta forman una selección y su suma puede diferir del puntaje completo.
+
+## D-029 · 27/11/2026 · Vistas del productor y del técnico
+
+**Contexto y alternativas.** La cooperativa usa una computadora compartida. Se compararon una sola vista con indicadores técnicos, dos vistas con PIN y dos vistas accesibles con exportación limitada por el servicio.
+
+**Decisión y razón.** La vista del productor reúne nivel, símbolo, frecuencia natural, tres factores y una recomendación. Las frecuencias conservan un denominador de cien cuando la pérdida sería invisible por redondeo a decenas. La orientación de campo se adapta a la modalidad, con la Agenda técnica agrícola de Querétaro (2017) y las recomendaciones de riego de INIFAP (2024) como referencias. La vista técnica concentra historia, explicación completa, simulación y descarga.
+
+**Consecuencias.** RF-15 y el Anexo I definen un modo técnico separado. Cualquier persona con acceso al equipo puede abrirlo. El servicio exporta exclusivamente variables municipales públicas con unidad, fecha y fuente. El tratamiento de datos individuales exigiría revisar el alcance y el control de acceso.
+
+## D-030 · 27/11/2026 · Consulta local y ciclo de demostración
+
+**Contexto y alternativas.** Se valoraron la consulta exclusivamente en línea, una copia de la última consulta y el precálculo de todo el padrón de demostración. La conectividad puede interrumpirse durante el trabajo de campo.
+
+**Decisión y razón.** El ciclo 2025 se identifica como reconstrucción retrospectiva. La API y la interfaz se sirven en el equipo. Al ejecutar la actualización se regeneran las 484 combinaciones de predicción y explicación (121 municipios-modalidades por cuatro etapas) y los 64 boletines municipales, uno por clave con la información de llenado de sus modalidades. Actualizar al incorporar un cierre o cambiar el modelo y antes de distribuir una nueva copia.
+
+**Consecuencias.** El aviso de copia muestra la fecha de generación y la ficha conserva la del último día observado de su etapa. En ausencia de la API siguen disponibles la búsqueda, las fichas y el PDF. La simulación interactiva requiere la API local. El ensayo bloqueó los destinos externos y luego detuvo la API. La red física del equipo siguió disponible para otros programas.
+
+## D-031 · 27/11/2026 · Escenarios y pérdida esperada por hectárea
+
+**Contexto y alternativas.** Un año promedio sintético puede mezclar etapas que nunca ocurrieron juntas. Se consideraron temporadas históricas representativas y diferentes fórmulas monetarias para comparar fecha y modalidad.
+
+**Decisión y razón.** Para la modalidad actual y el municipio, se suma la lluvia de las cuatro ventanas de referencia de cada año hasta 2020. Se selecciona el año más cercano a cada percentil 20, 50 y 80; en empate se toma el año más temprano. A, B y C comparten los tres años. Cada alternativa ocupa la fila municipal de su modalidad en ese mismo año y recalcula las 18 variables del clima diario para una siembra del 1 de junio al 15 de julio. La referencia de oro corresponde al 15 de junio.
+
+**Escala económica.** Para cada modalidad, L es el valor total de producción en pesos de 2025 dividido entre las hectáreas sembradas en 2003–2020, multiplicado por la siniestralidad media de los registros que superan el 10 % siniestrado. Se obtienen 10,656.87 MXN/ha en riego y 3,634.78 en temporal. La pérdida esperada es la probabilidad calibrada, antes de redondear, multiplicada por L. Constituye una aproximación regional al valor expuesto por hectárea. No incorpora los costos de cambiar la fecha o la modalidad.
+
+**Consecuencias.** El tornado parte de A en clima normal y altera una de las diez variables restringidas de P10 a P90 por vez. Los límites y el aviso P1–P99 para los predictores numéricos se calculan solo con 2003–2017. Los escenarios sin fila municipal-modalidad-año se indican como carentes de cobertura. Las comparaciones son retrospectivas y describen sensibilidad del modelo. En San José de Iturbide (11032), temporal, los años seleccionados fueron 2005, 2006 y 2004.
+
+## D-032 · 27/11/2026 · Prueba piloto de usabilidad
+
+**Contexto y alternativas.** Una demostración guiada evalúa el funcionamiento del sistema, pero oculta dificultades de uso. Se compararon la demostración y tres tareas observadas sin asistencia con un cuestionario posterior.
+
+**Decisión y razón.** Se prevén cinco sesiones de treinta minutos con perfiles técnicos, agronómicos o de producción. Después del consentimiento se emplean códigos P1–P5. Se registran logro, duración, errores y bloqueos por tarea. Tras dos minutos sin avance se termina esa tarea. El SUS usa los diez ítems españoles de Sevilla-Gonzalez et al. (2020), apéndice 2, y la puntuación de Brooke (1996).
+
+**Consecuencias.** RF-08 exige cuatro de cinco consultas interpretadas sin ayuda y RNF-01 exige un SUS medio de al menos 68 puntos. Se informan denominadores por tarea, perfiles y media de cuestionarios completos. Los problemas y las correcciones se documentarán con observaciones reales y capturas antes y después. Las pruebas automáticas aportan evidencia técnica independiente.
