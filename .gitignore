@@ -4,3 +4,6 @@ data/*/*
 !data/bronce/manifiesto.csv
 reports/etl.log
 __pycache__/
+
+artefactos/*
+!artefactos/.gitkeep
