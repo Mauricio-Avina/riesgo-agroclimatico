@@ -275,3 +275,15 @@ En el boosting, las cinco primeras columnas por media de |SHAP| fueron el indica
 **Decisión y razón.** Se prevén cinco sesiones de treinta minutos con perfiles técnicos, agronómicos o de producción. Después del consentimiento se emplean códigos P1–P5. Se registran logro, duración, errores y bloqueos por tarea. Tras dos minutos sin avance se termina esa tarea. El SUS usa los diez ítems españoles de Sevilla-Gonzalez et al. (2020), apéndice 2, y la puntuación de Brooke (1996).
 
 **Consecuencias.** RF-08 exige cuatro de cinco consultas interpretadas sin ayuda y RNF-01 exige un SUS medio de al menos 68 puntos. Se informan denominadores por tarea, perfiles y media de cuestionarios completos. Los problemas y las correcciones se documentarán con observaciones reales y capturas antes y después. Las pruebas automáticas aportan evidencia técnica independiente.
+
+## D-033 · 27/11/2026 · Adopción por fases
+
+**Contexto y alternativas.** El piloto carece de experiencia de operación cooperativa sostenida. Frente a un despliegue inmediato se eligieron un ciclo técnico, un ciclo de ampliación a productores y una operación con revisión anual.
+
+**Decisión y razón.** El plan define por rol actividades, indicadores y reglas de avance, ajuste o detención antes de recoger evidencia. La compatibilidad con tareas existentes, la facilidad de ensayo y los apoyos locales permiten evaluar adopción y utilidad (Rogers, Davis y Venkatesh et al.). **Consecuencias.** RF-13 evalúa el plan entregado. Las aprobaciones, minutas e indicadores de cada fase se obtendrían en campo. [Plan](adopcion.md)
+
+## D-034 · 27/11/2026 · Datos públicos y aportaciones futuras
+
+**Contexto y alternativas.** El equipo compartido ofrece acceso local a agregados públicos. Admitir aportaciones identificables en el mismo entorno expondría a titulares y comunidades.
+
+**Decisión y razón.** Se documentó un acuerdo de activación previa para información de personas o parcelas identificables, con finalidad, responsable, acceso limitado, plazo, derechos, correcciones y retiro. Se consideraron la LFPDPPP y CARE cuando la información sea colectiva. **Consecuencias.** RF-14 verifica la entrega del acuerdo propuesto. Hasta que las partes acuerden condiciones y existan controles apropiados, el piloto opera con agregados públicos. [Acuerdo propuesto](acuerdo_datos.md)
